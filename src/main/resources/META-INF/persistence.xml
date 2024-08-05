@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence           http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <persistence-unit name="com.tranlequocthong313_apparatus_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.tranlequocthong313.models.FcmToken</class>
+    <class>com.tranlequocthong313.models.UserMaintenance</class>
+    <class>com.tranlequocthong313.models.NotificationContent</class>
+    <class>com.tranlequocthong313.models.RepairCategory</class>
+    <class>com.tranlequocthong313.models.NotificationSender</class>
+    <class>com.tranlequocthong313.models.DeviceType</class>
+    <class>com.tranlequocthong313.models.Reply</class>
+    <class>com.tranlequocthong313.models.DaysOfWeek</class>
+    <class>com.tranlequocthong313.models.Message</class>
+    <class>com.tranlequocthong313.models.LocationHistory</class>
+    <class>com.tranlequocthong313.models.Provider</class>
+    <class>com.tranlequocthong313.models.ThreadCategory</class>
+    <class>com.tranlequocthong313.models.DeviceSpecification</class>
+    <class>com.tranlequocthong313.models.DaysOfWeekMaintenance</class>
+    <class>com.tranlequocthong313.models.Repair</class>
+    <class>com.tranlequocthong313.models.User</class>
+    <class>com.tranlequocthong313.models.Device</class>
+    <class>com.tranlequocthong313.models.DeviceCategory</class>
+    <class>com.tranlequocthong313.models.UserGroupChat</class>
+    <class>com.tranlequocthong313.models.Thread</class>
+    <class>com.tranlequocthong313.models.Issue</class>
+    <class>com.tranlequocthong313.models.GroupChat</class>
+    <class>com.tranlequocthong313.models.Maintenance</class>
+    <class>com.tranlequocthong313.models.Notification</class>
+    <class>com.tranlequocthong313.models.Location</class>
+    <class>com.tranlequocthong313.models.Support</class>
+    <class>com.tranlequocthong313.models.RepairCategoryRepair</class>
+    <class>com.tranlequocthong313.models.GroupMessage</class>
+    <class>com.tranlequocthong313.models.LocationDetail</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://0.0.0.0:3306/apparatus?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="Admin@123"/>
+    </properties>
+  </persistence-unit>
+</persistence>

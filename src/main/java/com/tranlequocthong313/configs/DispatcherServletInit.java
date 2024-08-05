@@ -7,14 +7,18 @@ package com.tranlequocthong313.configs;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
- *
  * @author tranlequocthong313
  */
 public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class[]{
+            HibernateConfig.class,
+            TilesConfig.class,
+	    ThirdPartyConfig.class,
+	    SpringSecurityConfig.class
+        };
     }
 
     @Override
