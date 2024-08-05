@@ -4,7 +4,6 @@
  */
 package com.tranlequocthong313.repositories.impl;
 
-import com.tranlequocthong313.exceptions.ThreadNotFoundException;
 import com.tranlequocthong313.models.Thread;
 import com.tranlequocthong313.repositories.BaseRepository;
 

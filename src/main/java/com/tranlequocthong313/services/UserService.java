@@ -31,5 +31,7 @@ public interface UserService extends UserDetailsService {
 
 	User getUserByUsername(String username);
 
-	User login(String username, String password);
+	UserDto login(String username, String password);
+
+	public User getCurrentUser();
 }

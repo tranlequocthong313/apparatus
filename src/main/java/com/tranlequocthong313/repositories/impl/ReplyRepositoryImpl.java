@@ -71,10 +71,6 @@ public class ReplyRepositoryImpl implements BaseRepository<Reply, Integer> {
 	@Override
 	public Reply save(Reply o) {
 		Session s = sessionFactory.getObject().getCurrentSession();
-		System.out.println(o.getContent());
-		System.out.println(o.getThread().getId());
-		System.out.println(o.getUser().getId());
-		System.out.println(o.getReply());
 		s.saveOrUpdate(o);
 		return o;
 	}

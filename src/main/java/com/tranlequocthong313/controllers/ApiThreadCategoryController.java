@@ -9,6 +9,7 @@ import com.tranlequocthong313.exceptions.Error;
 import com.tranlequocthong313.exceptions.ThreadCategoryNotFoundException;
 import com.tranlequocthong313.models.ThreadCategory;
 import com.tranlequocthong313.services.ThreadCategoryService;
+import com.tranlequocthong313.services.UserService;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -24,22 +25,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/thread-categories")
 public class ApiThreadCategoryController {
-	
+
 	@Autowired
 	private ThreadCategoryService threadCategoryService;
-	
+
 	@GetMapping
 	public List<ThreadCategoryDto> categories() {
 		return threadCategoryService.findAll();
 	}
-	
+
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ThreadCategory createCategory(@Valid @RequestBody ThreadCategory category) {
 		threadCategoryService.save(category);
 		return category;
 	}
-	
+
 	@PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ThreadCategory updateCategory(@Valid @RequestBody ThreadCategory category, @PathVariable(value = "id") int id) {
@@ -47,13 +48,13 @@ public class ApiThreadCategoryController {
 		threadCategoryDto.setName(category.getName());
 		return threadCategoryService.update(threadCategoryDto);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteCategory(@PathVariable(value = "id") int id) {
 		threadCategoryService.delete(id);
 	}
-	
+
 	@ExceptionHandler(ThreadCategoryNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Error hibernateError(ThreadCategoryNotFoundException e) {

@@ -4,6 +4,7 @@
  */
 package com.tranlequocthong313.controllers;
 
+import com.tranlequocthong313.dto.UserDto;
 import com.tranlequocthong313.exceptions.Error;
 import com.tranlequocthong313.exceptions.UserLoginBadRequestException;
 import com.tranlequocthong313.exceptions.UserNotFoundException;
@@ -59,8 +60,8 @@ public class ApiUserController {
 		= MediaType.APPLICATION_JSON_VALUE
 	)
 	@ResponseStatus(HttpStatus.OK)
-	public User login(@RequestBody User user) {
-		User u = userService.login(user.getUsername(), user.getPassword());
+	public UserDto login(@RequestBody User user) {
+		UserDto u = userService.login(user.getUsername(), user.getPassword());
 		if (u == null) {
 			throw new UserLoginBadRequestException();
 		}
@@ -70,10 +71,7 @@ public class ApiUserController {
 	@GetMapping(path = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
 	@CrossOrigin
 	public User currentUser(Principal user) {
-		if (user == null) {
-			throw new UserUnauthorizedException();
-		}
-		return userService.getUserByUsername(user.getName());
+		return userService.getCurrentUser();
 	}
 
 	@ExceptionHandler(UserLoginBadRequestException.class)
