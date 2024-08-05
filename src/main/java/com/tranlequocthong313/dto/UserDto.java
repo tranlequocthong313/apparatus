@@ -27,4 +27,5 @@ public class UserDto {
 	private Date createdAt;
 	private Date updatedAt;
 	private String note;
+	private String token;
 }

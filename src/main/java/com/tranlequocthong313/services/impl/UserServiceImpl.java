@@ -7,8 +7,10 @@ package com.tranlequocthong313.services.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.tranlequocthong313.dto.UserDto;
+import com.tranlequocthong313.exceptions.UnauthorizedException;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.UserRepository;
+import com.tranlequocthong313.services.JwtService;
 import com.tranlequocthong313.services.UserService;
 import java.io.IOException;
 import java.util.HashSet;
@@ -17,8 +19,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	private JwtService jwtService;
 
 	@Override
 	public List<UserDto> findAll(Map<String, String> queryParams) {
@@ -101,12 +108,35 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User login(String username, String password) {
+	public UserDto login(String username, String password) {
 		User user = userRepository.getUserByUsername(username);
 		if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
-			return user;
+			String token = this.jwtService.generateTokenLogin(user.getUsername());
+			UserDto userDto = mapToUserDto(user);
+			userDto.setToken(token);
+			return userDto;
 		}
 		return null;
+	}
+
+	@Override
+	public User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = null;
+
+		if (authentication != null) {
+			if (authentication.getPrincipal() instanceof UserDetails) {
+				username = ((UserDetails) authentication.getPrincipal()).getUsername();
+			} else {
+				username = authentication.getName();
+			}
+		}
+
+		if (username != null) {
+			return userRepository.getUserByUsername(username);
+		} else {
+			throw new UnauthorizedException("No authenticated user found");
+		}
 	}
 
 }

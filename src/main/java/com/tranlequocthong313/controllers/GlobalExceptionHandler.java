@@ -11,6 +11,7 @@ package com.tranlequocthong313.controllers;
 import com.tranlequocthong313.exceptions.DuplicateEntryException;
 import com.tranlequocthong313.exceptions.EntityNotFoundException;
 import com.tranlequocthong313.exceptions.Error;
+import com.tranlequocthong313.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -33,6 +34,12 @@ public class GlobalExceptionHandler {
 			errorMessage.append(fieldName).append(" (").append(message).append(") ");
 		});
 		return new Error(HttpStatus.BAD_REQUEST.value(), errorMessage.toString());
+	}
+
+	@ExceptionHandler(UnauthorizedException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public Error handleDuplicateEntry(UnauthorizedException ex) {
+		return new Error(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)

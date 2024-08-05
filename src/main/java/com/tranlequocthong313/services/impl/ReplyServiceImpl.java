@@ -7,6 +7,7 @@ package com.tranlequocthong313.services.impl;
 import com.tranlequocthong313.dto.ReplyDto;
 import com.tranlequocthong313.models.Reply;
 import com.tranlequocthong313.repositories.BaseRepository;
+import com.tranlequocthong313.services.AuthorizationService;
 import com.tranlequocthong313.services.ReplyService;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,9 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Autowired
 	private BaseRepository<Reply, Integer> replyRepository;
+
+	@Autowired
+	private AuthorizationService authorizationService;
 
 	@Override
 	public List<ReplyDto> findAll(Map<String, String> queryParams) {
@@ -55,12 +59,15 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Override
 	public void delete(Integer id) {
+		Reply reply = replyRepository.getReferenceById(id);
+		authorizationService.checkUserPermission(reply.getUser());
 		replyRepository.delete(id);
 	}
 
 	@Override
 	public Reply update(ReplyDto replyDto) {
 		Reply reply = mapToReply(replyDto);
+		authorizationService.checkUserPermission(reply.getUser());
 		replyRepository.save(reply);
 		return reply;
 	}

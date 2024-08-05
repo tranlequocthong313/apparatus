@@ -143,6 +143,11 @@
 			<version>1.18.34</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>9.31</version>
+		</dependency>
 
 	</dependencies>
 

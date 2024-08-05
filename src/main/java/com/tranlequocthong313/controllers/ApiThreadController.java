@@ -9,6 +9,7 @@ import com.tranlequocthong313.exceptions.Error;
 import com.tranlequocthong313.models.Thread;
 import com.tranlequocthong313.exceptions.ThreadNotFoundException;
 import com.tranlequocthong313.services.ThreadService;
+import com.tranlequocthong313.services.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -32,13 +33,15 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author tranlequocthong313
  */
-// TODO: Implement User xong quay lai day lam tiep
 @RestController
 @RequestMapping("/api/threads")
 public class ApiThreadController {
 
 	@Autowired
 	private ThreadService threadService;
+
+	@Autowired
+	private UserService userService;
 
 	@GetMapping
 	public List<ThreadDto> getThreads(@RequestParam Map<String, String> queryParams) {
@@ -54,6 +57,7 @@ public class ApiThreadController {
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public Thread createThread(@Valid @RequestBody Thread thread) {
+		thread.setUser(userService.getCurrentUser());
 		threadService.save(thread);
 		return thread;
 	}

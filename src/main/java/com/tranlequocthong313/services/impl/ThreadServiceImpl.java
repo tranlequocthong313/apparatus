@@ -7,6 +7,7 @@ package com.tranlequocthong313.services.impl;
 import com.tranlequocthong313.dto.ThreadDto;
 import com.tranlequocthong313.models.Thread;
 import com.tranlequocthong313.repositories.BaseRepository;
+import com.tranlequocthong313.services.AuthorizationService;
 import com.tranlequocthong313.services.ThreadService;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class ThreadServiceImpl implements ThreadService {
 
 	@Autowired
 	private BaseRepository<Thread, Integer> threadRepository;
+	@Autowired
+	private AuthorizationService authorizationService;
 
 	@Override
 	public List<ThreadDto> findAll(Map<String, String> queryParams) {
@@ -49,6 +52,8 @@ public class ThreadServiceImpl implements ThreadService {
 
 	@Override
 	public void delete(int id) {
+		Thread thread = threadRepository.getReferenceById(id);
+		authorizationService.checkUserPermission(thread.getUser());
 		threadRepository.delete(id);
 	}
 
@@ -60,6 +65,7 @@ public class ThreadServiceImpl implements ThreadService {
 	@Override
 	public Thread update(ThreadDto threadDto) {
 		Thread thread = mapToThread(threadDto);
+		authorizationService.checkUserPermission(thread.getUser());
 		threadRepository.save(thread);
 		return thread;
 	}
