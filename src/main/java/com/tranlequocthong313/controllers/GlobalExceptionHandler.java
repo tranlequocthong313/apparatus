@@ -38,19 +38,19 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public Error handleDuplicateEntry(UnauthorizedException ex) {
+	public Error unauthorized(UnauthorizedException ex) {
 		return new Error(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public Error handleDuplicateEntry(EntityNotFoundException ex) {
+	public Error notFound(EntityNotFoundException ex) {
 		return new Error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
 	}
 
 	@ExceptionHandler(DuplicateEntryException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	public Error handleDuplicateEntry(DuplicateEntryException ex) {
+	public Error conflict(DuplicateEntryException ex) {
 		return new Error(HttpStatus.CONFLICT.value(), ex.getMessage());
 	}
 
@@ -70,6 +70,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	public Error handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
+		System.out.println(ex.getMessage());
 		return new Error(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed");
 	}
 }

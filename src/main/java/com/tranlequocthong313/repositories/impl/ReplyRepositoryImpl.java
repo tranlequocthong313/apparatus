@@ -28,13 +28,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Transactional
-@PropertySource("classpath:configs.properties")
 public class ReplyRepositoryImpl implements BaseRepository<Reply, Integer> {
-
-	@Autowired
-	private Environment env;
 	@Autowired
 	private LocalSessionFactoryBean sessionFactory;
+	@Autowired
+	private Utils utils;
 
 	@Override
 	public <S extends Reply> List<S> findAll(Map<String, String> queryParams) {
@@ -56,8 +54,8 @@ public class ReplyRepositoryImpl implements BaseRepository<Reply, Integer> {
 		criteriaQuery.select(root);
 
 		Query query = session.createQuery(criteriaQuery);
-		String page = queryParams.get("page");
-		Utils.pagniate(query, page);
+		int page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
+		utils.pagniate(query, page);
 
 		return (List<S>) query.getResultList();
 	}

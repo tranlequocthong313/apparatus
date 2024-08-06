@@ -26,38 +26,38 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/thread-categories")
 public class ApiThreadCategoryController {
 
-	@Autowired
-	private ThreadCategoryService threadCategoryService;
+    @Autowired
+    private ThreadCategoryService threadCategoryService;
 
-	@GetMapping
-	public List<ThreadCategoryDto> categories() {
-		return threadCategoryService.findAll();
-	}
+    @GetMapping
+    public List<ThreadCategoryDto> categories() {
+        return threadCategoryService.findAll();
+    }
 
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ThreadCategory createCategory(@Valid @RequestBody ThreadCategory category) {
-		threadCategoryService.save(category);
-		return category;
-	}
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ThreadCategory createCategory(@Valid @RequestBody ThreadCategory category) {
+        threadCategoryService.save(category);
+        return category;
+    }
 
-	@PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public ThreadCategory updateCategory(@Valid @RequestBody ThreadCategory category, @PathVariable(value = "id") int id) {
-		ThreadCategoryDto threadCategoryDto = threadCategoryService.findById(id);
-		threadCategoryDto.setName(category.getName());
-		return threadCategoryService.update(threadCategoryDto);
-	}
+    @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ThreadCategory updateCategory(@Valid @RequestBody ThreadCategory category, @PathVariable(value = "id") int id) {
+        ThreadCategoryDto threadCategoryDto = threadCategoryService.findById(id);
+        threadCategoryDto.setName(category.getName());
+        return threadCategoryService.update(threadCategoryDto);
+    }
 
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteCategory(@PathVariable(value = "id") int id) {
-		threadCategoryService.delete(id);
-	}
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCategory(@PathVariable(value = "id") int id) {
+        threadCategoryService.delete(id);
+    }
 
-	@ExceptionHandler(ThreadCategoryNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public Error hibernateError(ThreadCategoryNotFoundException e) {
-		return new Error(HttpStatus.NOT_FOUND.value(), e.getMessage());
-	}
+    @ExceptionHandler(ThreadCategoryNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Error hibernateError(ThreadCategoryNotFoundException e) {
+        return new Error(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
 }
