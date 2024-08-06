@@ -51,7 +51,6 @@ com/tranlequocthong313/models/NotificationSender.class
 com/tranlequocthong313/models/GroupMessage.class
 com/tranlequocthong313/models/Location.class
 com/tranlequocthong313/controllers/ApiThreadCategoryController.class
-com/tranlequocthong313/filters/JwtAuthenticationTokenFilter.class
 com/tranlequocthong313/services/ReplyService.class
 com/tranlequocthong313/models/LocationDetail.class
 com/tranlequocthong313/exceptions/DuplicateEntryException.class
@@ -79,7 +78,6 @@ com/tranlequocthong313/exceptions/ThreadCategoryNotFoundException.class
 com/tranlequocthong313/repositories/impl/ReplyRepositoryImpl.class
 com/tranlequocthong313/models/DaysOfWeekMaintenance.class
 com/tranlequocthong313/models/UserMaintenance.class
-com/tranlequocthong313/configs/JwtSecurityConfig.class
 com/tranlequocthong313/models/Notification.class
 com/tranlequocthong313/services/ThreadService.class
 com/tranlequocthong313/models/ThreadCategory$ThreadCategoryBuilder.class

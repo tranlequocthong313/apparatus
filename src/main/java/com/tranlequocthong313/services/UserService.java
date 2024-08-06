@@ -6,32 +6,33 @@ package com.tranlequocthong313.services;
 
 import com.tranlequocthong313.dto.UserDto;
 import com.tranlequocthong313.models.User;
+
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- *
  * @author tranlequocthong313
  */
 public interface UserService extends UserDetailsService {
 
-	List<UserDto> findAll(Map<String, String> queryParams);
+    List<UserDto> findAll(Map<String, String> queryParams);
 
-	User findById(Integer id);
+    User findById(Integer id);
 
-	void save(User user, MultipartFile avatar);
+    void save(User user, MultipartFile avatar);
 
-	default void save(User user) {
-		save(user, null);
-	}
+    default void save(User user) {
+        save(user, null);
+    }
 
-	void delete(int id);
+    void delete(int id);
 
-	User getUserByUsername(String username);
+    User getUserByUsername(String username);
 
-	UserDto login(String username, String password);
+    UserDto login(String username, String password);
 
-	public User getCurrentUser();
+    public User getCurrentUser();
 }
