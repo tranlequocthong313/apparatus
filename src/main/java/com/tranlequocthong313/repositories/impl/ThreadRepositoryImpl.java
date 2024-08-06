@@ -32,7 +32,9 @@ public class ThreadRepositoryImpl implements BaseRepository<Thread, Integer> {
 	
 	@Autowired
 	private LocalSessionFactoryBean sessionFactory;
-	
+	@Autowired
+	private Utils utils;
+
 	@Override
 	public <S extends Thread> List<S> findAll(Map<String, String> queryParams) {
 		Session session = sessionFactory.getObject().getCurrentSession();
@@ -57,7 +59,8 @@ public class ThreadRepositoryImpl implements BaseRepository<Thread, Integer> {
 		}
 		
 		Query<Thread> query = session.createQuery(criteria);
-		Utils.pagniate(query, queryParams.get("page"));
+		int page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
+		utils.pagniate(query, page);
 		return (List<S>) query.getResultList();
 	}
 	

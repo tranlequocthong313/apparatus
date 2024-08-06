@@ -29,7 +29,7 @@ public class JwtServiceImpl implements JwtService {
 	public byte[] SHARED_SECRET_KEY;
 	public int EXPIRE_TIME = 86400000;
 
-	public JwtServiceImpl(@Value("${jwt.secret_key}") String secretKey) {
+	public JwtServiceImpl(@Value("${system.secret_key}") String secretKey) {
 		this.SHARED_SECRET_KEY = secretKey.getBytes();
 	}
 

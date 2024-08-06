@@ -7,34 +7,34 @@ package com.tranlequocthong313.utils;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 /**
  * @author tranlequocthong313
  */
+@Component
 @PropertySource("classpath:configs.properties")
 public class Utils {
-
     @Autowired
-    private static Environment env;
+    private Environment env;
     private static String PAGE_SIZE_PROPERTY_NAME = "common.pageSize";
+    private static int DEFAULT_PAGE_SIZE = 10;
 
-    public static void pagniate(Query query, String page, String pageSizePropertyName) {
-        if (page != null && !page.isEmpty()) {
-            int pageSize = env.getProperty(pageSizePropertyName, Integer.class);
-            int start = (Integer.parseInt(page) - 1) * pageSize;
-            query.setFirstResult(start);
-            query.setMaxResults(pageSize);
-        }
+    public void pagniate(Query query, int page) {
+        pagniate(query, page, null);
     }
 
-    public static void pagniate(Query query, String page) {
-        if (page != null && !page.isEmpty()) {
-            int pageSize = env.getProperty(PAGE_SIZE_PROPERTY_NAME, Integer.class);
-            int start = (Integer.parseInt(page) - 1) * pageSize;
-            query.setFirstResult(start);
-            query.setMaxResults(pageSize);
-        }
+    public void pagniate(Query query, int page, String pageSizePropertyName) {
+        int pageSize = env.getProperty(pageSizePropertyName == null ? PAGE_SIZE_PROPERTY_NAME : pageSizePropertyName, Integer.class, DEFAULT_PAGE_SIZE);
+        pagniate(query, page, pageSize);
+    }
+
+    private void pagniate(Query query, int page, int pageSize) {
+        int start = (page - 1) * pageSize;
+        query.setFirstResult(start);
+        query.setMaxResults(pageSize);
     }
 }
