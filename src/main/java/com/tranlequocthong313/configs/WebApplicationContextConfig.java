@@ -15,10 +15,9 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 import java.util.Locale;
+import org.springframework.core.annotation.Order;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -33,6 +32,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 	"com.tranlequocthong313.services",
 	"com.tranlequocthong313.repositories"
 })
+@Order(1)
 public class WebApplicationContextConfig implements WebMvcConfigurer {
 
 	@Override
@@ -40,19 +40,10 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 		configurer.enable();
 	}
 
-	@Bean
-	public InternalResourceViewResolver internalResourceViewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/pages/");
-		viewResolver.setSuffix(".jsp");
-
-		return viewResolver;
-	}
-
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
+		registry.addResourceHandler("/assets/**")
+			.addResourceLocations("/resources/assets/");
 	}
 
 	@Bean
