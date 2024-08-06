@@ -32,6 +32,30 @@
                        value="/WEB-INF/pages/login.jsp"/>
     </definition>
 
+    <definition name="device-categories" extends="baseLayout">
+        <put-attribute name="title" value="Device categories"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/device-categories/device-categories.jsp"/>
+    </definition>
+
+    <definition name="device-category" extends="baseLayout">
+        <put-attribute name="title" value="Device category"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/device-categories/device-category.jsp"/>
+    </definition>
+
+    <definition name="device-category-create" extends="baseLayout">
+        <put-attribute name="title" value="Create device category"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/device-categories/device-category-create-update.jsp"/>
+    </definition>
+
+    <definition name="device-category-update" extends="baseLayout">
+        <put-attribute name="title" value="Update device category"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/device-categories/device-category-create-update.jsp"/>
+    </definition>
+
     <definition name="device" extends="baseLayout">
         <put-attribute name="title" value="Device"/>
         <put-attribute name="main"

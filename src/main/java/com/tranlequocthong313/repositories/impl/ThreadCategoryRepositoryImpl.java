@@ -8,6 +8,7 @@ import com.tranlequocthong313.exceptions.DuplicateEntryException;
 import com.tranlequocthong313.exceptions.ThreadCategoryNotFoundException;
 import com.tranlequocthong313.models.ThreadCategory;
 import com.tranlequocthong313.repositories.BaseRepository;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,54 +25,64 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author tranlequocthong313
  */
 @Repository
 @Transactional
 public class ThreadCategoryRepositoryImpl implements BaseRepository<ThreadCategory, Integer> {
 
-	@Autowired
-	private LocalSessionFactoryBean sessionFactory;
+    @Autowired
+    private LocalSessionFactoryBean sessionFactory;
 
-	@Override
-	public Optional<ThreadCategory> findById(Integer id) {
-		Session session = sessionFactory.getObject().getCurrentSession();
-		return Optional.ofNullable(session.get(ThreadCategory.class, id));
-	}
+    @Override
+    public Optional<ThreadCategory> findById(Integer id) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        return Optional.ofNullable(session.get(ThreadCategory.class, id));
+    }
 
-	@Override
-	public ThreadCategory save(ThreadCategory o) {
-		Session session = sessionFactory.getObject().getCurrentSession();
-		try {
-			session.saveOrUpdate(o);
-		} catch (ConstraintViolationException e) {
-			throw new DuplicateEntryException("Duplicate entry for thread category");
-		}
-		return o;
-	}
+    @Override
+    public ThreadCategory save(ThreadCategory o) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        try {
+            session.saveOrUpdate(o);
+        } catch (ConstraintViolationException e) {
+            throw new DuplicateEntryException("Duplicate entry for thread category");
+        }
+        return o;
+    }
 
-	@Override
-	public void delete(Integer id) {
-		Session session = sessionFactory.getObject().getCurrentSession();
-		ThreadCategory c = getReferenceById(id);
-		session.delete(c);
-	}
+    @Override
+    public void delete(Integer id) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        ThreadCategory c = getReferenceById(id);
+        session.delete(c);
+    }
 
-	@Override
-	public <S extends ThreadCategory> List<S> findAll(Map<String, String> queryParams) {
-		Session session = sessionFactory.getObject().getCurrentSession();
+    @Override
+    public Long count(Map<String, String> queryParams) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<ThreadCategory> root = criteriaQuery.from(ThreadCategory.class);
+        criteriaQuery
+                .select(builder.count(root));
+        return session.createQuery(criteriaQuery).getSingleResult();
+    }
 
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<ThreadCategory> criteriaQuery = builder.createQuery(ThreadCategory.class);
+    @Override
+    public <S extends ThreadCategory> List<S> findAll(Map<String, String> queryParams) {
+        Session session = sessionFactory.getObject().getCurrentSession();
 
-		Root<ThreadCategory> root = criteriaQuery.from(ThreadCategory.class);
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ThreadCategory> criteriaQuery = builder.createQuery(ThreadCategory.class);
 
-		criteriaQuery.select(root);
+        Root<ThreadCategory> root = criteriaQuery.from(ThreadCategory.class);
 
-		Query query = session.createQuery(criteriaQuery);
+        criteriaQuery.select(root);
 
-		return (List<S>) query.getResultList();
-	}
+        Query query = session.createQuery(criteriaQuery);
+
+        return (List<S>) query.getResultList();
+    }
 
 }

@@ -53,7 +53,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Thread implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -9,10 +9,8 @@ import com.cloudinary.utils.ObjectUtils;
 import com.tranlequocthong313.components.JwtProvider;
 import com.tranlequocthong313.dto.UserDto;
 import com.tranlequocthong313.exceptions.UnauthorizedException;
-import com.tranlequocthong313.exceptions.UserLoginBadRequestException;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.UserRepository;
-import com.tranlequocthong313.services.JwtService;
 import com.tranlequocthong313.services.UserService;
 
 import java.io.IOException;
@@ -45,9 +43,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private JwtService jwtService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

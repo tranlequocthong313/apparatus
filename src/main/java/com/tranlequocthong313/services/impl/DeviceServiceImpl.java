@@ -5,7 +5,6 @@
 package com.tranlequocthong313.services.impl;
 
 import com.tranlequocthong313.models.Device;
-import com.tranlequocthong313.repositories.DeviceRepository;
 import com.tranlequocthong313.services.DeviceService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeviceServiceImpl implements DeviceService {
 
-    @Autowired
-    private DeviceRepository deviceRepository;
-
     @Override
     public List<Device> findAll() {
-        return deviceRepository.findAll();
+        return List.of();
     }
-
 }

@@ -30,6 +30,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -51,6 +56,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 	@NamedQuery(name = "DeviceCategory.findByCreatedAt", query = "SELECT d FROM DeviceCategory d WHERE d.createdAt = :createdAt"),
 	@NamedQuery(name = "DeviceCategory.findByUpdatedAt", query = "SELECT d FROM DeviceCategory d WHERE d.updatedAt = :updatedAt")})
 @JsonIgnoreProperties(value = {"deviceSpecificationSet", "deviceSet"})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DeviceCategory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -86,17 +94,8 @@ public class DeviceCategory implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceCategory")
 	private Set<Device> deviceSet;
 
-	public DeviceCategory() {
-	}
-
 	public DeviceCategory(Integer id) {
 		this.id = id;
-	}
-
-	public DeviceCategory(Integer id, Date createdAt, Date updatedAt) {
-		this.id = id;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
