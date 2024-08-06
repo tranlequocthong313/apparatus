@@ -14,6 +14,7 @@
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/configs/HibernateConfig.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/models/RepairCategoryRepairPK.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/models/Device.java
+/home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/dto/CategoryDto.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/configs/SecurityWebApplicationInitializer.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/configs/JwtSecurityConfig.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/filters/CustomAccessDeniedHandler.java
@@ -29,6 +30,7 @@
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/configs/SpringSecurityConfig.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/models/Reply.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/models/UserMaintenancePK.java
+/home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/controllers/UserController.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/services/ThreadService.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/exceptions/UserUnauthorizedException.java
 /home/tranlequocthong313/Workspace/phat_trien_he_thong_web/netbeans/apparatus/src/main/java/com/tranlequocthong313/repositories/impl/UserRepositoryImpl.java

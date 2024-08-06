@@ -6,23 +6,22 @@ package com.tranlequocthong313.repositories.impl;
 
 import com.tranlequocthong313.models.Thread;
 import com.tranlequocthong313.repositories.BaseRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
-
 import com.tranlequocthong313.utils.Utils;
-import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author tranlequocthong313

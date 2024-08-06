@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
-"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
     <definition name="baseLayout"
                 template="/WEB-INF/layouts/base.jsp">
-        <put-attribute name="title" value="" />
-        <put-attribute name="header"
-                       value="/WEB-INF/layouts/header.jsp" />
-        <put-attribute name="content" value="" />
+        <put-attribute name="title" value=""/>
+        <put-attribute name="navbar"
+                       value="/WEB-INF/layouts/navbar.jsp"/>
+        <put-attribute name="sidebar"
+                       value="/WEB-INF/layouts/sidebar.jsp"/>
+        <put-attribute name="main" value=""/>
         <put-attribute name="footer"
-                       value="/WEB-INF/layouts/footer.jsp" />
+                       value="/WEB-INF/layouts/footer.jsp"/>
     </definition>
+    <definition name="mainOnlyLayout"
+                template="/WEB-INF/layouts/main_only.jsp">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="main" value=""/>
+    </definition>
+
     <definition name="index" extends="baseLayout">
-        <put-attribute name="title" value="Dashboard" />
-        <put-attribute name="content"
-                       value="/WEB-INF/pages/index.jsp" />
+        <put-attribute name="title" value="Dashboard"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/index.jsp"/>
+    </definition>
+
+    <definition name="login" extends="mainOnlyLayout">
+        <put-attribute name="title" value="Login"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/login.jsp"/>
+    </definition>
+
+    <definition name="device" extends="baseLayout">
+        <put-attribute name="title" value="Device"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/device.jsp"/>
     </definition>
 </tiles-definitions>

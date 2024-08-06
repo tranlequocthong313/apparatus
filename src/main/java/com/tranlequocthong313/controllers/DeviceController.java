@@ -19,10 +19,10 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
     
-    @GetMapping("/devices")
-    public String devices(Model model) {
-        model.addAttribute("devices", deviceService.findAll());
-        
-        return "devices";
-    }
+//    @GetMapping("/devices")
+//    public String devices(Model model) {
+//        model.addAttribute("devices", deviceService.findAll());
+//        
+//        return "devices";
+//    }
 }
