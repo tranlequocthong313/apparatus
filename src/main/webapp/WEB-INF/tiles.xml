@@ -164,4 +164,13 @@
                        value="/WEB-INF/pages/devices/device-create-update.jsp"/>
     </definition>
     <!--    END DEVICES   -->
+
+    <!--    LOCATION HISTORIES    -->
+    <definition name="location-histories" extends="baseLayout">
+        <put-attribute name="title" value="Location Histories"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/location-histories/location-histories.jsp"/>
+    </definition>
+    <!--    END LOCATION HISTORIES   -->
+
 </tiles-definitions>

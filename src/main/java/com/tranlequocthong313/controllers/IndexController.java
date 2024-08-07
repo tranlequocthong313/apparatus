@@ -5,8 +5,6 @@ import com.tranlequocthong313.dto.CategoryDto;
 import java.util.Arrays;
 
 import com.tranlequocthong313.services.DeviceService;
-import com.tranlequocthong313.services.IssueService;
-import com.tranlequocthong313.services.RepairService;
 import com.tranlequocthong313.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +41,7 @@ public class IndexController {
                 new CategoryDto("/device-categories", "category", "deviceCategory"),
                 new CategoryDto("/locations", "place", "location"),
                 new CategoryDto("/location-details", "corporate_fare", "locationDetail"),
+                new CategoryDto("/location-histories", "history", "locationHistory"),
                 new CategoryDto("/providers", "factory", "provider"),
                 new CategoryDto("/maintenances", "engineering", "maintenance", "maintenance"),
                 new CategoryDto("/issues", "bug_report", "issue"),
