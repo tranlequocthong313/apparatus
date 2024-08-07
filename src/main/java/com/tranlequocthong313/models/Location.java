@@ -60,7 +60,7 @@ public class Location implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
-    @Size(max = 45)
+    @Size(max = 100)
     private String address;
     @Basic(optional = false)
     @Column(name = "created_at")

@@ -50,7 +50,10 @@ public class UserRepositoryImpl implements UserRepository {
         Root<User> root = criteria.from(User.class);
         criteria.where(getPredicates(queryParams, builder, root).toArray(Predicate[]::new));
         Query<User> query = session.createQuery(criteria);
-        int page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
+        int page = 1;
+        if (queryParams != null) {
+            page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
+        }
         utils.pagniate(query, page);
         return (List<S>) query.getResultList();
     }
@@ -69,6 +72,10 @@ public class UserRepositoryImpl implements UserRepository {
                                 builder.like(builder.lower(root.<String>get("phoneNUmber")), "%" + q.toLowerCase() + "%")
                         )
                 );
+            }
+            String userRole = queryParams.get("userRole");
+            if (userRole != null && !userRole.isEmpty()) {
+                predicates.add(builder.equal(root.get("userRole"), User.UserRole.valueOf(userRole)));
             }
         }
         return predicates;

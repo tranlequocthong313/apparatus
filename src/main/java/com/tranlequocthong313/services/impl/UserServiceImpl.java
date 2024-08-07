@@ -59,10 +59,12 @@ public class UserServiceImpl implements UserService {
     private UserDto mapToUserDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
+                .fullName(user.getFullName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .username(user.getUsername())
                 .active(user.getActive())
+                .avatar(user.getAvatar())
                 .userRole(user.getUserRole())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
@@ -145,6 +147,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object count() {
         return userRepository.count();
+    }
+
+    @Override
+    public List<UserDto> findByRole(User.UserRole userRole) {
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("userRole", userRole.name());
+        return findAll(queryParams);
     }
 
 }

@@ -5,6 +5,7 @@
 package com.tranlequocthong313.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -27,167 +28,164 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- *
  * @author tranlequocthong313
  */
 @Entity
 @Table(name = "provider")
 @XmlRootElement
 @NamedQueries({
-	@NamedQuery(name = "Provider.findAll", query = "SELECT p FROM Provider p"),
-	@NamedQuery(name = "Provider.findById", query = "SELECT p FROM Provider p WHERE p.id = :id"),
-	@NamedQuery(name = "Provider.findByName", query = "SELECT p FROM Provider p WHERE p.name = :name"),
-	@NamedQuery(name = "Provider.findByPhoneNumber", query = "SELECT p FROM Provider p WHERE p.phoneNumber = :phoneNumber"),
-	@NamedQuery(name = "Provider.findByEmail", query = "SELECT p FROM Provider p WHERE p.email = :email"),
-	@NamedQuery(name = "Provider.findByWebsite", query = "SELECT p FROM Provider p WHERE p.website = :website"),
-	@NamedQuery(name = "Provider.findByAddress", query = "SELECT p FROM Provider p WHERE p.address = :address"),
-	@NamedQuery(name = "Provider.findByCreatedAt", query = "SELECT p FROM Provider p WHERE p.createdAt = :createdAt"),
-	@NamedQuery(name = "Provider.findByUpdatedAt", query = "SELECT p FROM Provider p WHERE p.updatedAt = :updatedAt")})
+        @NamedQuery(name = "Provider.findAll", query = "SELECT p FROM Provider p"),
+        @NamedQuery(name = "Provider.findById", query = "SELECT p FROM Provider p WHERE p.id = :id"),
+        @NamedQuery(name = "Provider.findByName", query = "SELECT p FROM Provider p WHERE p.name = :name"),
+        @NamedQuery(name = "Provider.findByPhoneNumber", query = "SELECT p FROM Provider p WHERE p.phoneNumber = :phoneNumber"),
+        @NamedQuery(name = "Provider.findByEmail", query = "SELECT p FROM Provider p WHERE p.email = :email"),
+        @NamedQuery(name = "Provider.findByWebsite", query = "SELECT p FROM Provider p WHERE p.website = :website"),
+        @NamedQuery(name = "Provider.findByAddress", query = "SELECT p FROM Provider p WHERE p.address = :address"),
+        @NamedQuery(name = "Provider.findByCreatedAt", query = "SELECT p FROM Provider p WHERE p.createdAt = :createdAt"),
+        @NamedQuery(name = "Provider.findByUpdatedAt", query = "SELECT p FROM Provider p WHERE p.updatedAt = :updatedAt")})
 @JsonIgnoreProperties(value = {"deviceSet"})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Provider implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Basic(optional = false)
-	private Integer id;
-	@Size(max = 45)
-	private String name;
-	@Size(max = 20)
-	@Column(name = "phone_number")
-	private String phoneNumber;
-	// @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-	@Size(max = 100)
-	private String email;
-	@Size(max = 100)
-	private String website;
-	@Size(max = 45)
-	private String address;
-	@Basic(optional = false)
-	@Column(name = "created_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreationTimestamp
-	private Date createdAt;
-	@Basic(optional = false)
-	@Column(name = "updated_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	private Date updatedAt;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "provider")
-	private Set<Device> deviceSet;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    private Integer id;
+    @Size(max = 45)
+    private String name;
+    @Size(max = 20)
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 100)
+    private String email;
+    @Size(max = 100)
+    private String website;
+    @Size(max = 100)
+    private String address;
+    @Basic(optional = false)
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
+    @Basic(optional = false)
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date updatedAt;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "provider")
+    private Set<Device> deviceSet;
 
-	public Provider() {
-	}
+    public Provider(Integer id) {
+        this.id = id;
+    }
 
-	public Provider(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public Provider(Integer id, Date createdAt, Date updatedAt) {
-		this.id = id;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getWebsite() {
+        return website;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setWebsite(String website) {
+        this.website = website;
+    }
 
-	public String getWebsite() {
-		return website;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setWebsite(String website) {
-		this.website = website;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
+    @XmlTransient
+    public Set<Device> getDeviceSet() {
+        return deviceSet;
+    }
 
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+    public void setDeviceSet(Set<Device> deviceSet) {
+        this.deviceSet = deviceSet;
+    }
 
-	@XmlTransient
-	public Set<Device> getDeviceSet() {
-		return deviceSet;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
 
-	public void setDeviceSet(Set<Device> deviceSet) {
-		this.deviceSet = deviceSet;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Provider)) {
+            return false;
+        }
+        Provider other = (Provider) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (id != null ? id.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Provider)) {
-			return false;
-		}
-		Provider other = (Provider) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "com.tranlequocthong313.models.Provider[ id=" + id + " ]";
-	}
+    @Override
+    public String toString() {
+        return "com.tranlequocthong313.models.Provider[ id=" + id + " ]";
+    }
 }
