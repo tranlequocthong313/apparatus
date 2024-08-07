@@ -6,6 +6,7 @@ package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.models.Device;
+import com.tranlequocthong313.models.LocationHistory;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.services.*;
 import com.tranlequocthong313.services.DeviceService;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -42,6 +44,8 @@ public class DeviceController {
     private UserService userService;
     @Autowired
     private ProviderService providerService;
+    @Autowired
+    private LocationHistoryService locationHistoryService;
     @Autowired
     private Utils utils;
 
@@ -132,6 +136,7 @@ public class DeviceController {
             model.addAttribute("device", device);
             return "device-update";
         }
+
         DeviceDto deviceDto = deviceService.findById(id);
         deviceDto.setDateStartedOperation(device.getDateStartedOperation());
         deviceDto.setDateOfManufacture(device.getDateOfManufacture());
@@ -144,11 +149,18 @@ public class DeviceController {
         deviceDto.setStatus(device.getStatus());
         deviceDto.setNote(device.getNote());
         deviceDto.setDeviceCategory(device.getDeviceCategory());
-        deviceDto.setLocation(device.getLocation()); // TODO: Save to LocationDetailHistory
-        deviceDto.setLocationDetail(device.getLocationDetail()); // TODO: Save to LocationDetailHistory
+        deviceDto.setLocation(device.getLocation());
+        deviceDto.setLocationDetail(device.getLocationDetail());
         deviceDto.setProvider(device.getProvider());
         deviceDto.setUser(device.getUser());
         deviceService.update(deviceDto, image);
+        locationHistoryService.save(LocationHistory.builder()
+                .dateOfMoving(new Date())
+                .location(device.getLocation())
+                .locationDetail(device.getLocationDetail())
+                .device(device)
+                .build()
+        );
         return "redirect:/devices";
     }
 
