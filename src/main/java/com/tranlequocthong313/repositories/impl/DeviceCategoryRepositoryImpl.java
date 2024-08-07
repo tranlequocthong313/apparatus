@@ -13,15 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author tranlequocthong313
@@ -46,6 +40,7 @@ public class DeviceCategoryRepositoryImpl implements BaseRepository<DeviceCatego
         int page = 1;
 
         criteria.where(getPredicates(queryParams, builder, root).toArray(Predicate[]::new));
+        criteria.orderBy(getOrdersBy(queryParams, builder, root));
 
         if (queryParams != null) {
             page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
@@ -54,6 +49,19 @@ public class DeviceCategoryRepositoryImpl implements BaseRepository<DeviceCatego
         Query<DeviceCategory> query = session.createQuery(criteria);
         utils.pagniate(query, page);
         return (List<S>) query.getResultList();
+    }
+
+    private static List<Order> getOrdersBy(Map<String, String> queryParams, CriteriaBuilder builder, Root<DeviceCategory> root) {
+        List<Order> orders = new ArrayList<Order>();
+        if (queryParams != null && queryParams.containsKey("sort")) {
+            String direction = queryParams.getOrDefault("direction", "asc");
+            if (Objects.equals(direction, "desc")) {
+                orders.add(builder.desc(root.get(queryParams.get("sort"))));
+            } else {
+                orders.add(builder.asc(root.get(queryParams.get("sort"))));
+            }
+        }
+        return orders;
     }
 
     private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<DeviceCategory> root) {

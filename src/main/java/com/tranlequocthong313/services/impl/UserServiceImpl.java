@@ -142,4 +142,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Object count() {
+        return userRepository.count();
+    }
+
 }

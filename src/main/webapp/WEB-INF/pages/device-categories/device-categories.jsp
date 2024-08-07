@@ -26,9 +26,9 @@
             </div>
             <div class="card-body px-0 pb-2">
                 <!-- Search Form -->
-                <form action="<c:url value='/device-categories' />" method="get" class="mb-3 mx-4">
+                <form action="<c:url value='/device-categories' />" method="get" class="mx-4">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-1">
                             <div class="input-group input-group-outline">
                                 <input type="text" name="q" id="search" value="${searchQuery}" class="form-control"
                                        placeholder="<spring:message code='search' />" aria-label="Search"/>
@@ -53,90 +53,142 @@
                         </div>
                     </div>
                 </form>
-                <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                        <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
-                                <spring:message code="id"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                <spring:message code="name"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                <spring:message code="model"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                <spring:message code="producer"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                <spring:message code="origin"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                <spring:message code="type"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                <spring:message code="created.at"/>
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                <spring:message code="updated.at"/>
-                            </th>
-                            <th class="text-secondary opacity-7"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${deviceCategories}" var="deviceCategory">
+
+                <!-- Bulk Action Form -->
+                <form id="bulkActionForm" action="<c:url value='/device-categories/bulk-action' />" method="post">
+                    <div class="mx-4 d-flex  mb-1">
+                        <div class="col-md-2">
+                            <div class=" input-group input-group-outline">
+                                <select name="action" id="bulkActionSelect" class="form-control">
+                                    <option value=""><spring:message code="select.action"/></option>
+                                    <option value="delete"><spring:message code="delete"/></option>
+                                    <!-- Add more actions here if needed -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mx-2">
+                            <button type="button" id="executeBulkAction" class="btn btn-primary" disabled>
+                                <spring:message code="execute.action"/>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
                             <tr>
-                                <td class="ps-3">
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.id}</p>
-                                </td>
-                                <td>
-                                    <div class="d-flex px-2 py-1">
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">
-                                                <a href="<c:url value='/device-categories/${deviceCategory.id}' />"
-                                                   class="text-dark">${deviceCategory.name}</a>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.model}</p>
-                                </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.producer}</p>
-                                </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.origin}</p>
-                                </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.deviceType.name}</p>
-                                </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.createdAt}</p>
-                                </td>
-                                <td>
-                                    <p class="text-xs font-weight-bold mb-0">${deviceCategory.updatedAt}</p>
-                                </td>
-                                <td class="align-middle">
-                                    <a href="<c:url value='/device-categories/${deviceCategory.id}/update' />"
-                                       class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
-                                       data-original-title="<spring:message code='edit' />">
-                                        <spring:message code="edit"/>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
+                                    <a href="<c:url value='/device-categories?sort=id&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="id"/>
+                                        <i class="material-icons">${param.sort eq 'id' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
-                                    |
-                                    <a href="<c:url value='/device-categories/${deviceCategory.id}/delete' />"
-                                       class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                       data-original-title="<spring:message code='delete' />"
-                                       onclick="return confirm('<spring:message code='confirm.delete'/>');">
-                                        <spring:message code="delete"/>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    <a href="<c:url value='/device-categories?sort=name&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="name"/>
+                                        <i class="material-icons">${param.sort eq 'name' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
-                                </td>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/device-categories?sort=model&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="model"/>
+                                        <i class="material-icons">${param.sort eq 'model' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/device-categories?sort=producer&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="producer"/>
+                                        <i class="material-icons">${param.sort eq 'producer' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/device-categories?sort=origin&directionc=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="origin"/>
+                                        <i class="material-icons">${param.sort eq 'origin' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/device-categories?sort=type&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="type"/>
+                                        <i class="material-icons">${param.sort eq 'type' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/device-categories?sort=createdAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="created.at"/>
+                                        <i class="material-icons">${param.sort eq 'createdAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/device-categories?sort=updatedAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="updated.at"/>
+                                        <i class="material-icons">${param.sort eq 'updatedAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-secondary opacity-7"></th>
                             </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${deviceCategories}" var="deviceCategory">
+                                <tr>
+                                    <td class="ps-3">
+                                        <input type="checkbox" name="selectedIds" value="${deviceCategory.id}"
+                                               class="selectItem">
+                                    </td>
+                                    <td class="ps-3">
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.id}</p>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">
+                                                    <a href="<c:url value='/device-categories/${deviceCategory.id}' />"
+                                                       class="text-dark">${deviceCategory.name}</a>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.model}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.producer}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.origin}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.deviceType.name}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.createdAt}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${deviceCategory.updatedAt}</p>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="<c:url value='/device-categories/${deviceCategory.id}/update' />"
+                                           class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
+                                           data-original-title="<spring:message code='edit' />">
+                                            <spring:message code="edit"/>
+                                        </a>
+                                        |
+                                        <a href="<c:url value='/device-categories/${deviceCategory.id}/delete' />"
+                                           class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                           data-original-title="<spring:message code='delete' />"
+                                           onclick="return confirm('<spring:message code='confirm.delete'/>');">
+                                            <spring:message code="delete"/>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- Pagination -->
@@ -170,4 +222,39 @@
         </div>
     </div>
 </div>
+
+<script>
+    // JavaScript to handle select all/none functionality and enable/disable execute button
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.selectItem');
+        const executeButton = document.getElementById('executeBulkAction');
+        const bulkActionSelect = document.getElementById('bulkActionSelect');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            toggleExecuteButton();
+        });
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', toggleExecuteButton);
+        });
+
+        bulkActionSelect.addEventListener('change', toggleExecuteButton);
+
+        function toggleExecuteButton() {
+            const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            const actionSelected = bulkActionSelect.value !== '';
+            executeButton.disabled = !(anyChecked && actionSelected);
+        }
+
+        executeButton.addEventListener('click', function () {
+            if (confirm('<spring:message code="confirm.bulk.action" />')) {
+                document.getElementById('bulkActionForm').submit();
+            }
+        });
+    });
+</script>
 

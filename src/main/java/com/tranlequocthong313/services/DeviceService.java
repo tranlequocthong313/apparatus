@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface DeviceService {
     List<Device> findAll();
+
+    Object count();
 }

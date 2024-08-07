@@ -35,4 +35,6 @@ public interface UserService extends UserDetailsService {
     UserDto login(String username, String password);
 
     public User getCurrentUser();
+
+    Object count();
 }

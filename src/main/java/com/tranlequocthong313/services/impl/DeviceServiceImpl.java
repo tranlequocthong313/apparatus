@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DeviceServiceImpl implements DeviceService {
-
     @Override
     public List<Device> findAll() {
         return List.of();
+    }
+
+    @Override
+    public Object count() {
+        return 515;
     }
 }
