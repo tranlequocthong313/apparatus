@@ -6,6 +6,7 @@ package com.tranlequocthong313.repositories.impl;
 
 import com.tranlequocthong313.exceptions.DuplicateEntryException;
 import com.tranlequocthong313.exceptions.UserNotFoundException;
+import com.tranlequocthong313.models.DeviceCategory;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.UserRepository;
 
@@ -47,10 +48,17 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
 
         Root<User> root = criteria.from(User.class);
+        criteria.where(getPredicates(queryParams, builder, root).toArray(Predicate[]::new));
+        Query<User> query = session.createQuery(criteria);
+        int page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
+        utils.pagniate(query, page);
+        return (List<S>) query.getResultList();
+    }
 
+
+    private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<User> root) {
+        List<Predicate> predicates = new ArrayList<Predicate>();
         if (queryParams != null) {
-            List<Predicate> predicates = new ArrayList<Predicate>();
-
             String q = queryParams.get("q");
             if (q != null && !q.isEmpty()) {
                 predicates.add(
@@ -63,11 +71,25 @@ public class UserRepositoryImpl implements UserRepository {
                 );
             }
         }
+        return predicates;
+    }
 
-        Query<User> query = session.createQuery(criteria);
-        int page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
-        utils.pagniate(query, page);
-        return (List<S>) query.getResultList();
+    @Override
+    public Long count(Map<String, String> queryParams) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<User> root = criteriaQuery.from(User.class);
+
+        criteriaQuery
+                .select(builder.count(root))
+                .where(builder.and(
+                        getPredicates(
+                                queryParams,
+                                builder,
+                                root
+                        ).toArray(new Predicate[0])));
+        return session.createQuery(criteriaQuery).getSingleResult();
     }
 
     @Override

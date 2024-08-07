@@ -80,11 +80,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             throws Exception {
         http.csrf().disable()
                 .formLogin(form -> form
-                                .loginPage("/users/login")
-                                .defaultSuccessUrl("/")
-                                .loginProcessingUrl("/users/login")
-                                .failureUrl("/users/login?error")
-                                .permitAll()
+                        .loginPage("/users/login")
+                        .defaultSuccessUrl("/")
+                        .loginProcessingUrl("/users/login")
+                        .failureUrl("/users/login?error")
+                        .permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.logout().logoutUrl("/users/logout").logoutSuccessUrl("/users/login?logout").permitAll();

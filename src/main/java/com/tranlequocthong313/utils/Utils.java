@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 public class Utils {
     @Autowired
     private Environment env;
-    private static String PAGE_SIZE_PROPERTY_NAME = "common.pageSize";
-    private static int DEFAULT_PAGE_SIZE = 10;
+    private String PAGE_SIZE_PROPERTY_NAME = "common.pageSize";
+    public final int DEFAULT_PAGE_SIZE = 10;
 
     public void pagniate(Query query, int page) {
         pagniate(query, page, null);

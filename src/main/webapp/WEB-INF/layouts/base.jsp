@@ -5,8 +5,9 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
@@ -20,8 +21,7 @@
         <tiles:insertAttribute name="title"/>
     </title>
 
-
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700"/>
 
@@ -38,10 +38,8 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="${pageContext.request.contextPath}/assets/css/material-dashboard.css?v=3.1.0"
           rel="stylesheet"/>
-
 </head>
 <body class="g-sidenav-show  bg-gray-100">
-
 
 <!-- Sidebar -->
 <tiles:insertAttribute name="sidebar"/>
@@ -51,12 +49,12 @@
     <tiles:insertAttribute name="navbar"/>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-        <!--Main-->
+        <!-- Main Content -->
         <tiles:insertAttribute name="main"/>
-        <!--End Main-->
-        <!--Footer-->
+        <!-- End Main Content -->
+        <!-- Footer -->
         <tiles:insertAttribute name="footer"/>
-        <!--End Footer-->
+        <!-- End Footer -->
     </div>
 </main>
 
@@ -67,8 +65,8 @@
     <div class="card shadow-lg">
         <div class="card-header pb-0 pt-3">
             <div class="float-start">
-                <h5 class="mt-3 mb-0">UI Configurator</h5>
-                <p>See our dashboard options.</p>
+                <h5 class="mt-3 mb-0"><spring:message code="ui.configurator"/></h5>
+                <p><spring:message code="see.dashboard.options"/></p>
             </div>
             <div class="float-end mt-4">
                 <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -81,7 +79,7 @@
         <div class="card-body pt-sm-3 pt-0">
             <!-- Sidebar Backgrounds -->
             <div>
-                <h6 class="mb-0">Sidebar Colors</h6>
+                <h6 class="mb-0"><spring:message code="sidebar.colors"/></h6>
             </div>
             <a href="javascript:void(0)" class="switch-trigger background-color">
                 <div class="badge-colors my-2 text-start">
@@ -99,24 +97,21 @@
             </a>
             <!-- Sidenav Type -->
             <div class="mt-3">
-                <h6 class="mb-0">Sidenav Type</h6>
-                <p class="text-sm">Choose between 2 different sidenav types.</p>
+                <h6 class="mb-0"><spring:message code="sidenav.type"/></h6>
+                <p class="text-sm"><spring:message code="choose.sidenav.type"/></p>
             </div>
             <div class="d-flex">
                 <button class="btn bg-gradient-dark px-3 mb-2 active" data-class="bg-gradient-dark"
-                        onclick="sidebarType(this)">Dark
-                </button>
+                        onclick="sidebarType(this)"><spring:message code="dark"/></button>
                 <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent"
-                        onclick="sidebarType(this)">Transparent
-                </button>
-                <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">
-                    White
-                </button>
+                        onclick="sidebarType(this)"><spring:message code="transparent"/></button>
+                <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-white"
+                        onclick="sidebarType(this)"><spring:message code="white"/></button>
             </div>
-            <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
+            <p class="text-sm d-xl-none d-block mt-2"><spring:message code="sidenav.desktop.only"/></p>
             <!-- Navbar Fixed -->
             <div class="mt-3 d-flex">
-                <h6 class="mb-0">Navbar Fixed</h6>
+                <h6 class="mb-0"><spring:message code="navbar.fixed"/></h6>
                 <div class="form-check form-switch ps-0 ms-auto my-auto">
                     <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed"
                            onclick="navbarFixed(this)">
@@ -124,19 +119,31 @@
             </div>
             <hr class="horizontal dark my-3">
             <div class="mt-2 d-flex">
-                <h6 class="mb-0">Light / Dark</h6>
+                <h6 class="mb-0"><spring:message code="light.dark"/></h6>
                 <div class="form-check form-switch ps-0 ms-auto my-auto">
                     <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version"
                            onclick="darkMode(this)">
                 </div>
             </div>
             <hr class="horizontal dark my-sm-4">
+
+            <!-- Language Selection -->
+            <div class="mt-3">
+                <h6 class="mb-0"><spring:message code="language"/></h6>
+                <div class="d-flex">
+                    <a href="javascript:void(0)" id="lang-vi" onclick="setLanguage('vi')"
+                       class="<c:if test='${pageContext.request.locale == "vi"}'>lang-active</c:if>"><spring:message
+                            code="vietnamese"/></a>
+                    <a href="javascript:void(0)" id="lang-en"
+                       class="ms-3 <c:if test='${pageContext.request.locale == "en"}'>lang-active</c:if>"
+                       onclick="setLanguage('en')"><spring:message code="english"/></a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
-</div>
 
-<!--   Core JS Files   -->
 <script src="${pageContext.request.contextPath}/assets/js/core/popper.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/core/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -151,8 +158,16 @@
     }
 </script>
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="${pageContext.request.contextPath}/assets/js/material-dashboard.min.js?v=3.1.0"></script>
+<!--<script src="${pageContext.request.contextPath}/assets/js/material-dashboard.min.js?v=3.1.0"></script>-->
+<script src="${pageContext.request.contextPath}/assets/js/material-dashboard.js"></script>
 
 </body>
-
 </html>
+
+<style>
+    a.lang-active {
+        font-weight: bold;
+        color: #05834E; /* Hoặc bất kỳ màu nào bạn muốn */
+    }
+</style>
+
