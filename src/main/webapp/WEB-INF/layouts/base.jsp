@@ -167,7 +167,7 @@
 <style>
     a.lang-active {
         font-weight: bold;
-        color: #05834E; /* Hoặc bất kỳ màu nào bạn muốn */
+        color: #EC407A; /* Hoặc bất kỳ màu nào bạn muốn */
     }
 </style>
 

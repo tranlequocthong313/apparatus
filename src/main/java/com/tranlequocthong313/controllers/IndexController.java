@@ -42,6 +42,7 @@ public class IndexController {
                 new CategoryDto("/devices", "storage", "device", "device"),
                 new CategoryDto("/device-categories", "category", "deviceCategory"),
                 new CategoryDto("/locations", "place", "location"),
+                new CategoryDto("/location-details", "corporate_fare", "locationDetail"),
                 new CategoryDto("/providers", "factory", "provider"),
                 new CategoryDto("/maintenances", "engineering", "maintenance", "maintenance"),
                 new CategoryDto("/issues", "bug_report", "issue"),
