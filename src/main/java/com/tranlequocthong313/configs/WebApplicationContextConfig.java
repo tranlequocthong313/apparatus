@@ -5,6 +5,7 @@
 package com.tranlequocthong313.configs;
 
 import com.tranlequocthong313.formatters.DeviceTypeFormatter;
+import com.tranlequocthong313.formatters.LocationFormatter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -91,6 +92,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new DeviceTypeFormatter());
+        registry.addFormatter(new LocationFormatter());
     }
 
 }

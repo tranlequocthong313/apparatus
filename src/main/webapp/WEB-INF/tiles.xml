@@ -3,6 +3,7 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
+    <!--    LAYOUTS   -->
     <definition name="baseLayout"
                 template="/WEB-INF/layouts/base.jsp">
         <put-attribute name="title" value=""/>
@@ -14,11 +15,13 @@
         <put-attribute name="footer"
                        value="/WEB-INF/layouts/footer.jsp"/>
     </definition>
+
     <definition name="mainOnlyLayout"
                 template="/WEB-INF/layouts/main_only.jsp">
         <put-attribute name="title" value=""/>
         <put-attribute name="main" value=""/>
     </definition>
+    <!--    END LAYOUTS   -->
 
     <definition name="index" extends="baseLayout">
         <put-attribute name="title" value="Dashboard"/>
@@ -32,29 +35,83 @@
                        value="/WEB-INF/pages/login.jsp"/>
     </definition>
 
+    <!--    DEVICE CATEGORIES   -->
     <definition name="device-categories" extends="baseLayout">
-        <put-attribute name="title" value="Device categories"/>
+        <put-attribute name="title" value="Device Categories"/>
         <put-attribute name="main"
                        value="/WEB-INF/pages/device-categories/device-categories.jsp"/>
     </definition>
 
     <definition name="device-category" extends="baseLayout">
-        <put-attribute name="title" value="Device category"/>
+        <put-attribute name="title" value="Device Category"/>
         <put-attribute name="main"
                        value="/WEB-INF/pages/device-categories/device-category.jsp"/>
     </definition>
 
     <definition name="device-category-create" extends="baseLayout">
-        <put-attribute name="title" value="Create device category"/>
+        <put-attribute name="title" value="Create Device Category"/>
         <put-attribute name="main"
                        value="/WEB-INF/pages/device-categories/device-category-create-update.jsp"/>
     </definition>
 
     <definition name="device-category-update" extends="baseLayout">
-        <put-attribute name="title" value="Update device category"/>
+        <put-attribute name="title" value="Update Device Category"/>
         <put-attribute name="main"
                        value="/WEB-INF/pages/device-categories/device-category-create-update.jsp"/>
     </definition>
+    <!--    END DEVICE CATEGORIES   -->
+
+    <!--    LOCATIONS    -->
+    <definition name="locations" extends="baseLayout">
+        <put-attribute name="title" value="Locations"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/locations/locations.jsp"/>
+    </definition>
+
+    <definition name="location" extends="baseLayout">
+        <put-attribute name="title" value="Location"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/locations/location.jsp"/>
+    </definition>
+
+    <definition name="location-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Location"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/locations/location-create-update.jsp"/>
+    </definition>
+
+    <definition name="location-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Location"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/locations/location-create-update.jsp"/>
+    </definition>
+    <!--    END LOCATIONS   -->
+
+    <!--    LOCATION DETAILS    -->
+    <definition name="location-details" extends="baseLayout">
+        <put-attribute name="title" value="Location Details"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/location-details/location-details.jsp"/>
+    </definition>
+
+    <definition name="location-detail" extends="baseLayout">
+        <put-attribute name="title" value="Location Detail"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/location-details/location-detail.jsp"/>
+    </definition>
+
+    <definition name="location-detail-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Location Detail"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/location-details/location-detail-create-update.jsp"/>
+    </definition>
+
+    <definition name="location-detail-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Location Detail"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/location-details/location-detail-create-update.jsp"/>
+    </definition>
+    <!--    END LOCATION DETAILS  -->
 
     <definition name="device" extends="baseLayout">
         <put-attribute name="title" value="Device"/>

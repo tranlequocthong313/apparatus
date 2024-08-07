@@ -5,12 +5,21 @@
 package com.tranlequocthong313.utils;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 
+import com.tranlequocthong313.models.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author tranlequocthong313
@@ -36,5 +45,18 @@ public class Utils {
         int start = (page - 1) * pageSize;
         query.setFirstResult(start);
         query.setMaxResults(pageSize);
+    }
+
+    public <T> List<Order> getOrdersBy(Map<String, String> queryParams, CriteriaBuilder builder, Root<T> root) {
+        List<Order> orders = new ArrayList<Order>();
+        if (queryParams != null && queryParams.containsKey("sort")) {
+            String direction = queryParams.getOrDefault("direction", "asc");
+            if (Objects.equals(direction, "desc")) {
+                orders.add(builder.desc(root.get(queryParams.get("sort"))));
+            } else {
+                orders.add(builder.asc(root.get(queryParams.get("sort"))));
+            }
+        }
+        return orders;
     }
 }

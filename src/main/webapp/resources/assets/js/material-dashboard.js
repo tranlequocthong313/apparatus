@@ -392,62 +392,6 @@ function debounce(func, wait, immediate) {
     };
 };
 
-// initialization of Toasts
-document.addEventListener("DOMContentLoaded", function () {
-    var toastElList = [].slice.call(document.querySelectorAll(".toast"));
-
-    var toastList = toastElList.map(function (toastEl) {
-        return new bootstrap.Toast(toastEl);
-    });
-
-    var toastButtonList = [].slice.call(document.querySelectorAll(".toast-btn"));
-
-    toastButtonList.map(function (toastButtonEl) {
-        toastButtonEl.addEventListener("click", function () {
-            var toastToTrigger = document.getElementById(toastButtonEl.dataset.target);
-
-            if (toastToTrigger) {
-                var toast = bootstrap.Toast.getInstance(toastToTrigger);
-                toast.show();
-            }
-        });
-    });
-
-    // Tải cấu hình từ localStorage
-    const darkModeState = localStorage.getItem('darkMode') === 'true';
-    const sidebarColorState = localStorage.getItem('sidebarColor');
-    const sidebarTypeState = localStorage.getItem('sidebarType');
-    const navbarFixedState = localStorage.getItem('navbarFixed') === 'true';
-
-    // Áp dụng cấu hình cho chế độ tối
-    if (darkModeState) {
-        document.getElementById('dark-version').removeAttribute("checked");
-        darkMode(document.getElementById('dark-version'), true);
-    }
-
-    // Áp dụng màu sidebar
-    if (sidebarColorState) {
-        const colorElement = document.querySelector(`[data-color="${sidebarColorState}"]`);
-        if (colorElement) {
-            sidebarColor(colorElement);
-        }
-    }
-
-    // Áp dụng loại sidebar
-    if (sidebarTypeState) {
-        const typeElement = document.querySelector(`[data-class="${sidebarTypeState}"]`);
-        if (typeElement) {
-            sidebarType(typeElement);
-        }
-    }
-
-    // Áp dụng trạng thái cố định navbar
-    if (!navbarFixedState) {
-        document.getElementById('navbarFixed').setAttribute("checked", "true");
-        navbarFixed(document.getElementById('navbarFixed'), true);
-    }
-});
-
 // Tabs navigation
 
 var total = document.querySelectorAll('.nav-pills');
@@ -966,5 +910,61 @@ function highlightCurrentLanguage() {
     }
 }
 
-// Gọi hàm để làm nổi bật ngôn ngữ khi trang được tải
-document.addEventListener('DOMContentLoaded', highlightCurrentLanguage);
+// initialization of Toasts
+document.addEventListener("DOMContentLoaded", function () {
+    var toastElList = [].slice.call(document.querySelectorAll(".toast"));
+
+    var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl);
+    });
+
+    var toastButtonList = [].slice.call(document.querySelectorAll(".toast-btn"));
+
+    toastButtonList.map(function (toastButtonEl) {
+        toastButtonEl.addEventListener("click", function () {
+            var toastToTrigger = document.getElementById(toastButtonEl.dataset.target);
+
+            if (toastToTrigger) {
+                var toast = bootstrap.Toast.getInstance(toastToTrigger);
+                toast.show();
+            }
+        });
+    });
+
+    // Tải cấu hình từ localStorage
+    const darkModeState = localStorage.getItem('darkMode') === 'true';
+    const sidebarColorState = localStorage.getItem('sidebarColor');
+    const sidebarTypeState = localStorage.getItem('sidebarType');
+    const navbarFixedState = localStorage.getItem('navbarFixed') === 'true';
+
+    // Áp dụng cấu hình cho chế độ tối
+    if (darkModeState) {
+        document.getElementById('dark-version').removeAttribute("checked");
+        darkMode(document.getElementById('dark-version'), true);
+    }
+
+    // Áp dụng màu sidebar
+    if (sidebarColorState) {
+        const colorElement = document.querySelector(`[data-color="${sidebarColorState}"]`);
+        if (colorElement) {
+            sidebarColor(colorElement);
+        }
+    }
+
+    // Áp dụng loại sidebar
+    if (sidebarTypeState) {
+        const typeElement = document.querySelector(`[data-class="${sidebarTypeState}"]`);
+        if (typeElement) {
+            sidebarType(typeElement);
+        }
+    }
+
+    // Áp dụng trạng thái cố định navbar
+    if (!navbarFixedState) {
+        document.getElementById('navbarFixed').setAttribute("checked", "true");
+        navbarFixed(document.getElementById('navbarFixed'), true);
+    }
+
+    highlightCurrentLanguage()
+});
+
