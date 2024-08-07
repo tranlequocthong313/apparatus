@@ -37,4 +37,8 @@ public interface LocationDetailService {
     Long count(Map<String, String> queryParams);
 
     void update(LocationDetailDto locationDetail, MultipartFile image);
+
+    default List<LocationDetailDto> findAll() {
+        return findAll(null);
+    }
 }

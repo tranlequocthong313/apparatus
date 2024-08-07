@@ -34,7 +34,13 @@ public interface UserService extends UserDetailsService {
 
     UserDto login(String username, String password);
 
-    public User getCurrentUser();
+    User getCurrentUser();
 
     Object count();
+
+    default List<UserDto> findAll() {
+        return findAll(null);
+    }
+
+    List<UserDto> findByRole(User.UserRole userRole);
 }

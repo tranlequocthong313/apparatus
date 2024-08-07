@@ -113,9 +113,55 @@
     </definition>
     <!--    END LOCATION DETAILS  -->
 
+    <!--    PROVIDERS    -->
+    <definition name="providers" extends="baseLayout">
+        <put-attribute name="title" value="Providers"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/providers/providers.jsp"/>
+    </definition>
+
+    <definition name="provider" extends="baseLayout">
+        <put-attribute name="title" value="Provider"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/providers/provider.jsp"/>
+    </definition>
+
+    <definition name="provider-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Provider"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/providers/provider-create-update.jsp"/>
+    </definition>
+
+    <definition name="provider-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Provider"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/providers/provider-create-update.jsp"/>
+    </definition>
+    <!--    END PROVIDERS   -->
+
+    <!--    DEVICES    -->
+    <definition name="devices" extends="baseLayout">
+        <put-attribute name="title" value="Devices"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/devices/devices.jsp"/>
+    </definition>
+
     <definition name="device" extends="baseLayout">
         <put-attribute name="title" value="Device"/>
         <put-attribute name="main"
-                       value="/WEB-INF/pages/device.jsp"/>
+                       value="/WEB-INF/pages/devices/device.jsp"/>
     </definition>
+
+    <definition name="device-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Device"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/devices/device-create-update.jsp"/>
+    </definition>
+
+    <definition name="device-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Device"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/devices/device-create-update.jsp"/>
+    </definition>
+    <!--    END DEVICES   -->
 </tiles-definitions>

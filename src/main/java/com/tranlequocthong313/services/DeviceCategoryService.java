@@ -37,4 +37,8 @@ public interface DeviceCategoryService {
     Long count(Map<String, String> queryParams);
 
     void update(DeviceCategoryDto deviceCategory, MultipartFile image);
+
+    default List<DeviceCategoryDto> findAll() {
+        return findAll(null);
+    }
 }
