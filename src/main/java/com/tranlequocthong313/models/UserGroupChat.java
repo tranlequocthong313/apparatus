@@ -35,11 +35,9 @@ public class UserGroupChat implements Serializable {
 	@EmbeddedId
 	protected UserGroupChatPK userGroupChatPK;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "group_chat_id", referencedColumnName = "id", insertable = false, updatable = false)
 	@OneToOne(optional = false)
 	private GroupChat groupChat;
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
 	@OneToOne(optional = false)
 	private User user;

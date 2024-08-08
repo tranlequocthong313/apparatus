@@ -5,8 +5,8 @@ import com.tranlequocthong313.dto.CategoryDto;
 import java.security.Principal;
 import java.util.Arrays;
 
-import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.services.DeviceService;
+import com.tranlequocthong313.services.IssueService;
 import com.tranlequocthong313.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +34,8 @@ public class IndexController {
     private DeviceService deviceService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private IssueService issueService;
 
     @ModelAttribute
     public void commAttrs(Model model, HttpServletRequest request, Principal principal) {
@@ -58,8 +60,8 @@ public class IndexController {
     @GetMapping("/")
     public String index(Locale locale, Model model) {
         model.addAttribute("totalDevices", deviceService.count());
-        model.addAttribute("totalIssues", 22);
-        model.addAttribute("totalRepairCost", 15200000);
+        model.addAttribute("totalIssues", issueService.findByDone(false).size());
+        model.addAttribute("totalRepairCost", issueService.totalCost());
         model.addAttribute("totalUsers", userService.count());
         return "index";
     }

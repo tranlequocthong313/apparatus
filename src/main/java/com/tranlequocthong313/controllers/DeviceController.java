@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Map;
  */
 // TODO: fix location and location detail when creating new ones
 // TODO: add more filter options
-// TODO: show more info in detail page
+// TODO: add device specs
 @Controller
 @RequestMapping("/devices")
 public class DeviceController {
@@ -47,6 +48,8 @@ public class DeviceController {
     private UserService userService;
     @Autowired
     private ProviderService providerService;
+    @Autowired
+    private IssueService issueService;
     @Autowired
     private LocationHistoryService locationHistoryService;
     @Autowired
@@ -75,7 +78,11 @@ public class DeviceController {
 
     @GetMapping("/{id}")
     public String getDevice(@PathVariable(value = "id") String id, Model model) {
-        model.addAttribute("device", deviceService.findById(id));
+        DeviceDto deviceDto = deviceService.findById(id);
+        model.addAttribute("totalCost", issueService.totalCost(deviceDto));
+        model.addAttribute("unresolvedDays", issueService.unresolvedDays(Map.of("device", id)));
+        model.addAttribute("totalIssue", issueService.count(Map.of("device", id)));
+        model.addAttribute("device", deviceDto);
         return "device";
     }
 

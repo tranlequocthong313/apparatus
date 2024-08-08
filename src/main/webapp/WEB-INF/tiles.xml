@@ -223,6 +223,12 @@
         <put-attribute name="main"
                        value="/WEB-INF/pages/issues/issue-create-update.jsp"/>
     </definition>
+
+    <definition name="issue-resolve" extends="baseLayout">
+        <put-attribute name="title" value="Resolve Issue"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/issues/issue-resolve.jsp"/>
+    </definition>
     <!--    END ISSUES   -->
 
 </tiles-definitions>
