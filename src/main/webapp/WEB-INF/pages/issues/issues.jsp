@@ -16,17 +16,13 @@
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                     <h6 class="text-white text-capitalize ps-3">
-                        <spring:message code="device.list.title"/>
+                        <spring:message code="issue.list.title"/>
                     </h6>
-                    <a class="btn bg-gradient-dark mb-0 mx-2" href="<c:url value='/devices/create' />">
-                        <i class="material-icons text-sm">add</i>&nbsp;&nbsp;
-                        <spring:message code="add.new.device"/>
-                    </a>
                 </div>
             </div>
             <div class="card-body px-0 pb-2">
                 <!-- Search Form -->
-                <form action="<c:url value='/devices' />" method="get" class="mx-4">
+                <form action="<c:url value='/issues' />" method="get" class="mx-4">
                     <div class="row">
                         <div class="col-md-4 mb-1">
                             <div class="input-group input-group-outline">
@@ -37,46 +33,10 @@
                         <div class="col-md-2 mb-3">
                             <div class="input-group input-group-outline">
                                 <select name="type" id="type" class="form-control">
-                                    <option value=""><spring:message code="all.device.types"/></option>
-                                    <c:forEach items="${deviceTypes}" var="deviceType">
-                                        <option value="${deviceType.id}" ${type == deviceType.id ? 'selected' : ''}>
-                                                ${deviceType.name}
-                                        </option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="input-group input-group-outline">
-                                <select name="location" id="location" class="form-control">
-                                    <option value=""><spring:message code="all.locations"/></option>
-                                    <c:forEach items="${locations}" var="lo">
-                                        <option value="${lo.id}" ${location == lo.id ? 'selected' : ''}>
-                                                ${lo.building}
-                                        </option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="input-group input-group-outline">
-                                <select name="provider" id="provider" class="form-control">
-                                    <option value=""><spring:message code="all.providers"/></option>
-                                    <c:forEach items="${providers}" var="pr">
-                                        <option value="${pr.id}" ${provider == pr.id ? 'selected' : ''}>
-                                                ${pr.name}
-                                        </option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="input-group input-group-outline">
-                                <select name="status" id="status" class="form-control">
-                                    <option value=""><spring:message code="all.statuses"/></option>
-                                    <c:forEach items="${statuses}" var="st">
-                                        <option value="${st}" ${status == st ? 'selected' : ''}>
-                                            <spring:message code="status.${st.toLowerCase()}"/>
+                                    <option value=""><spring:message code="all.issue.severity"/></option>
+                                    <c:forEach items="${severities}" var="se">
+                                        <option value="${se}" ${severity == se ? 'selected' : ''}>
+                                            <spring:message code="severity.${se.toLowerCase()}"/>
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -91,7 +51,7 @@
                 </form>
 
 
-                <form id="bulkActionForm" action="<c:url value='/devices/bulk-action' />" method="post">
+                <form id="bulkActionForm" action="<c:url value='/issues/bulk-action' />" method="post">
 
                     <div class="mx-4 d-flex  mb-1">
                         <div class="col-md-2">
@@ -117,45 +77,69 @@
                                     <input type="checkbox" id="selectAll">
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
-                                    <a href="<c:url value='/devices?sort=id&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="device.id"/>
+                                    <a href="<c:url value='/issues?sort=id&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.id"/>
                                         <i class="material-icons">${param.sort eq 'id' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <spring:message code="device.name"/>
+                                    <spring:message code="device"/>
                                 </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/devices?sort=serial&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="device.serial"/>
-                                        <i class="material-icons">${param.sort eq 'serial' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
+                                    <a href="<c:url value='/issues?sort=title&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.title"/>
+                                        <i class="material-icons">${param.sort eq 'title' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <spring:message code="device.type"/>
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/devices?sort=location&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="device.location"/>
-                                        <i class="material-icons">${param.sort eq 'location' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    <a href="<c:url value='/issues?sort=description&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.description"/>
+                                        <i class="material-icons">${param.sort eq 'description' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/devices?sort=locationDetail&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="device.location.detail"/>
-                                        <i class="material-icons">${param.sort eq 'locationdetail' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    <a href="<c:url value='/issues?sort=occurredAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.occurredAt"/>
+                                        <i class="material-icons">${param.sort eq 'occurredAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/devices?sort=provider&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="device.provider"/>
-                                        <i class="material-icons">${param.sort eq 'provider' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    <a href="<c:url value='/issues?sort=cost&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.cost"/>
+                                        <i class="material-icons">${param.sort eq 'cost' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/devices?sort=status&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="device.status"/>
-                                        <i class="material-icons">${param.sort eq 'status' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    <a href="<c:url value='/issues?sort=done&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.done"/>
+                                        <i class="material-icons">${param.sort eq 'done' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <spring:message code="creator"/>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/issues?sort=note&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="note"/>
+                                        <i class="material-icons">${param.sort eq 'note' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/issues?sort=severity&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.severity"/>
+                                        <i class="material-icons">${param.sort eq 'severity' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/issues?sort=createdAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="created.at"/>
+                                        <i class="material-icons">${param.sort eq 'createdAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/issues?sort=updatedAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="updated.at"/>
+                                        <i class="material-icons">${param.sort eq 'updatedAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-secondary opacity-7">
@@ -163,61 +147,67 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${devices}" var="device">
+                            <c:forEach items="${issues}" var="issue">
                                 <tr>
                                     <td class="ps-3">
-                                        <input type="checkbox" name="selectedIds" value="${device.id}"
+                                        <input type="checkbox" name="selectedIds" value="${issue.id}"
                                                class="selectItem">
                                     </td>
                                     <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${device.id}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${issue.id}</p>
                                     </td>
                                     <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">
-                                                    <a href="<c:url value='/devices/${device.id}' />"
-                                                       class="text-dark">${device.deviceCategory.name}</a>
-                                                </h6>
-                                            </div>
-                                        </div>
+                                        <p class="text-xs font-weight-bold mb-0">${issue.device.id}</p>
+                                    </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.title}</p>
+                                    </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.description}</p>
+                                    </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.occurredAt}</p>
+                                    </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.cost}</p>
+                                    </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.done}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${device.serial}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${issue.user.fullName}</p>
+                                    </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.note}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${device.deviceCategory.deviceType.name}</p>
+                                        <c:choose>
+                                            <c:when test="${issue.severity == 'LOW'}">
+                                                <p class="text-xs font-weight-bold mb-0 text-success">${issue.severity}</p>
+                                            </c:when>
+                                            <c:when test="${issue.severity == 'MEDIUM'}">
+                                                <p class="text-xs font-weight-bold mb-0 text-warning">${issue.severity}</p>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p class="text-xs font-weight-bold mb-0 text-danger">${issue.severity}</p>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${device.location.building}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${issue.createdAt}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${device.locationDetail.room}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">${device.provider.name}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">${device.status}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${issue.updatedAt}</p>
                                     </td>
                                     <td class="align-middle">
-                                        <a class="text-dark font-weight-bold text-xs"
-                                           href="<c:url value='/issues/create?deviceid=${device.id}' />"
-                                           data-toggle="tooltip"
-                                           data-original-title="<spring:message code="add.new.issue"/>"
-                                        >
-                                            <spring:message code="add.new.issue"/>
-                                        </a>
-                                        |
-                                        <a href="<c:url value='/devices/${device.id}/update' />"
-                                           class="text-dark font-weight-bold text-xs"
-                                           data-toggle="tooltip"
+                                        <a href="<c:url value='/issues/${issue.id}/update' />"
+                                           class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
                                            data-original-title="<spring:message code='edit' />">
                                             <spring:message code="edit"/>
                                         </a>
                                         |
-                                        <a href="<c:url value='/devices/${device.id}/delete' />"
-                                           class="text-dark text-xs" data-toggle="tooltip"
+                                        <a href="<c:url value='/issues/${issue.id}/delete' />"
+                                           class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                                            data-original-title="<spring:message code='delete' />"
                                            onclick="return confirm('<spring:message code='confirm.delete'/>');">
                                             <spring:message code="delete"/>

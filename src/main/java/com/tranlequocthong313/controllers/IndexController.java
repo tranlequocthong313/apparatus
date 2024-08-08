@@ -2,8 +2,10 @@ package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.CategoryDto;
 
+import java.security.Principal;
 import java.util.Arrays;
 
+import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.services.DeviceService;
 import com.tranlequocthong313.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class IndexController {
     private UserService userService;
 
     @ModelAttribute
-    public void commAttrs(Model model, HttpServletRequest request) {
+    public void commAttrs(Model model, HttpServletRequest request, Principal principal) {
         model.addAttribute("categories", Arrays.asList(
                 new CategoryDto("/", "dashboard", "dashboard"),
                 new CategoryDto("/devices", "storage", "device", "device"),
@@ -50,6 +52,7 @@ public class IndexController {
                 new CategoryDto("/users/logout", "logout", "logout", "account")
         ));
         model.addAttribute("currentPath", request.getRequestURI().replace("/apparatus/", ""));
+        model.addAttribute("currentUser", userService.getCurrentUser());
     }
 
     @GetMapping("/")

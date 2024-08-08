@@ -173,4 +173,56 @@
     </definition>
     <!--    END LOCATION HISTORIES   -->
 
+    <!--    MAINTENANCES    -->
+    <definition name="maintenances" extends="baseLayout">
+        <put-attribute name="title" value="Maintenances"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/maintenances/maintenances.jsp"/>
+    </definition>
+
+    <definition name="maintenance" extends="baseLayout">
+        <put-attribute name="title" value="Maintenance"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/maintenances/maintenance.jsp"/>
+    </definition>
+
+    <definition name="maintenance-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Maintenance"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/maintenances/maintenance-create-update.jsp"/>
+    </definition>
+
+    <definition name="maintenance-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Maintenance"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/maintenances/maintenance-create-update.jsp"/>
+    </definition>
+    <!--    END MAINTENANCES   -->
+
+    <!--    ISSUES    -->
+    <definition name="issues" extends="baseLayout">
+        <put-attribute name="title" value="Issues"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/issues/issues.jsp"/>
+    </definition>
+
+    <definition name="issue" extends="baseLayout">
+        <put-attribute name="title" value="Issue"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/issues/issue.jsp"/>
+    </definition>
+
+    <definition name="issue-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Issue"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/issues/issue-create-update.jsp"/>
+    </definition>
+
+    <definition name="issue-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Issue"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/issues/issue-create-update.jsp"/>
+    </definition>
+    <!--    END ISSUES   -->
+
 </tiles-definitions>

@@ -117,7 +117,7 @@ public class DeviceServiceImpl implements DeviceService {
         return device;
     }
 
-    private Device mapToDevice(DeviceDto deviceDto) {
+    public Device mapToDevice(DeviceDto deviceDto) {
         return Device.builder()
                 .id(deviceDto.getId())
                 .dateStartedOperation(deviceDto.getDateStartedOperation())
