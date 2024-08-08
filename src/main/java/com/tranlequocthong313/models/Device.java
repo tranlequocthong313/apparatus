@@ -22,7 +22,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-// TODO: Change Many to One relationships to Eager
 /**
  * @author tranlequocthong313
  */
@@ -119,19 +118,19 @@ public class Device implements Serializable {
     @OneToMany(mappedBy = "device")
     private Set<LocationHistory> locationHistorySet;
     @JoinColumn(name = "device_category_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private DeviceCategory deviceCategory;
     @JoinColumn(name = "location_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Location location;
     @JoinColumn(name = "location_detail_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private LocationDetail locationDetail;
     @JoinColumn(name = "provider_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Provider provider;
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User user;
     @OneToMany(mappedBy = "device")
     private Set<Maintenance> maintenanceSet;

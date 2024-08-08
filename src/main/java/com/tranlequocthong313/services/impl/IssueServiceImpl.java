@@ -4,14 +4,18 @@
  */
 package com.tranlequocthong313.services.impl;
 
+import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
+import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.Issue;
 import com.tranlequocthong313.repositories.BaseRepository;
+import com.tranlequocthong313.repositories.IssueRepository;
 import com.tranlequocthong313.services.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +27,7 @@ import java.util.stream.Collectors;
 public class IssueServiceImpl implements IssueService {
 
     @Autowired
-    private BaseRepository<Issue, Integer> issueRepository;
+    private IssueRepository issueRepository;
 
     @Override
     public List<IssueDto> findAll(Map<String, String> queryParams) {
@@ -37,6 +41,7 @@ public class IssueServiceImpl implements IssueService {
                 .title(issue.getTitle())
                 .description(issue.getDescription())
                 .occurredAt(issue.getOccurredAt())
+                .resolvedAt(issue.getResolvedAt())
                 .image(issue.getImage())
                 .cost(issue.getCost())
                 .severity(issue.getSeverity())
@@ -52,6 +57,13 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public IssueDto findById(Integer id) {
         return mapToIssueDto(issueRepository.getReferenceById(id));
+    }
+
+    @Override
+    public List<IssueDto> findByDone(Boolean done) {
+        Map<String, String> query = new HashMap<>();
+        query.put("done", done.toString());
+        return findAll(query);
     }
 
     @Override
@@ -80,6 +92,20 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
+    public Long totalCost(DeviceDto device) {
+        Map<String, String> queryParams = new HashMap<>();
+        if (device != null) {
+           queryParams.put("device", device.getId());
+        }
+        return issueRepository.totalCost(queryParams);
+    }
+
+    @Override
+    public Long unresolvedDays(Map<String, String> queryParams) {
+        return issueRepository.unresolvedDays(queryParams);
+    }
+
+    @Override
     public void save(Issue issue) {
         issueRepository.save(issue);
     }
@@ -97,6 +123,7 @@ public class IssueServiceImpl implements IssueService {
                 .title(issueDto.getTitle())
                 .description(issueDto.getDescription())
                 .occurredAt(issueDto.getOccurredAt())
+                .resolvedAt(issueDto.getResolvedAt())
                 .image(issueDto.getImage())
                 .cost(issueDto.getCost())
                 .severity(issueDto.getSeverity())

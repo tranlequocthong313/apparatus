@@ -35,12 +35,12 @@ public class RepairCategoryRepair implements Serializable {
 	@EmbeddedId
 	protected RepairCategoryRepairPK repairCategoryRepairPK;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "repair_id", referencedColumnName = "id", insertable = false, updatable = false)
+	@OneToOne(optional = false)
 	private Repair repair;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "repair_category_id", referencedColumnName = "id", insertable = false, updatable = false)
+	@OneToOne(optional = false)
 	private RepairCategory repairCategory;
 
 	public RepairCategoryRepair() {

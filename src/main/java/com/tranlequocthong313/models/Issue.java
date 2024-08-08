@@ -63,6 +63,10 @@ public class Issue implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date occurredAt;
+    @Column(name = "resolved_at")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date resolvedAt;
     @Size(max = 255)
     private String image;
     private Long cost;
@@ -85,10 +89,10 @@ public class Issue implements Serializable {
     @UpdateTimestamp
     private Date updatedAt;
     @JoinColumn(name = "device_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Device device;
     @JoinColumn(name = "reporter_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User user;
 
     public Issue(Integer id) {
@@ -125,6 +129,14 @@ public class Issue implements Serializable {
 
     public void setOccurredAt(Date occurredAt) {
         this.occurredAt = occurredAt;
+    }
+
+    public Date getResolvedAt() {
+        return resolvedAt;
+    }
+
+    public void setResolvedAt(Date fixedAt) {
+        this.resolvedAt = fixedAt;
     }
 
     public String getImage() {
