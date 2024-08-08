@@ -116,6 +116,12 @@
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <a href="<c:url value='/issues?sort=resolvedAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="issue.resolvedAt"/>
+                                        <i class="material-icons">${param.sort eq 'resolvedAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    </a>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                     <spring:message code="creator"/>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -174,6 +180,9 @@
                                     <td class="psg-3">
                                         <p class="text-xs font-weight-bold mb-0">${issue.done}</p>
                                     </td>
+                                    <td class="psg-3">
+                                        <p class="text-xs font-weight-bold mb-0">${issue.resolvedAt}</p>
+                                    </td>
                                     <td>
                                         <p class="text-xs font-weight-bold mb-0">${issue.user.fullName}</p>
                                     </td>
@@ -200,6 +209,12 @@
                                         <p class="text-xs font-weight-bold mb-0">${issue.updatedAt}</p>
                                     </td>
                                     <td class="align-middle">
+                                        <a href="<c:url value='/issues/${issue.id}/resolve' />"
+                                           class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
+                                           data-original-title="<spring:message code='resolve' />">
+                                            <spring:message code="resolve"/>
+                                        </a>
+                                        |
                                         <a href="<c:url value='/issues/${issue.id}/update' />"
                                            class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
                                            data-original-title="<spring:message code='edit' />">

@@ -9,6 +9,7 @@ import com.tranlequocthong313.models.DeviceCategory;
 import com.tranlequocthong313.models.Issue;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.BaseRepository;
+import com.tranlequocthong313.repositories.IssueRepository;
 import com.tranlequocthong313.utils.Utils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -18,17 +19,15 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author tranlequocthong313
  */
 @Repository
 @Transactional
-public class IssueRepositoryImpl implements BaseRepository<Issue, Integer> {
+public class IssueRepositoryImpl implements IssueRepository {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
@@ -76,10 +75,21 @@ public class IssueRepositoryImpl implements BaseRepository<Issue, Integer> {
                         )
                 );
             }
+            String device = queryParams.get("device");
+            if (device != null && !device.isEmpty()) {
+                Join<Issue, Device> deviceJoin = root.join("device");
+                predicates.add(builder.equal(deviceJoin.get("id"), device));
+            }
             String severity = queryParams.get("severity");
             if (severity != null && !severity.isEmpty()) {
                 predicates.add(
                         builder.like(root.get("severity"), severity)
+                );
+            }
+            String done = queryParams.get("done");
+            if (done != null && !done.isEmpty()) {
+                predicates.add(
+                        builder.equal(root.get("done"), Boolean.parseBoolean(done))
                 );
             }
         }
@@ -122,5 +132,52 @@ public class IssueRepositoryImpl implements BaseRepository<Issue, Integer> {
                                 root
                         ).toArray(new Predicate[0])));
         return session.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    @Override
+    public Long totalCost(Map<String, String> queryParams) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<Issue> root = criteriaQuery.from(Issue.class);
+        List<Predicate> predicates = new ArrayList<>();
+        if (queryParams != null) {
+            String done = queryParams.getOrDefault("done", "true");
+            predicates.add(builder.equal(root.get("done"), Boolean.valueOf(done)));
+            String device = queryParams.get("device");
+            if (device != null && !device.isEmpty()) {
+                Join<Issue, Device> issueDeviceJoin = root.join("device");
+                predicates.add(builder.equal(issueDeviceJoin.get("id"), device));
+            }
+        } else {
+            predicates.add(builder.equal(root.get("done"), true));
+        }
+        criteriaQuery.select(builder.sum(root.get("cost"))).where(predicates.toArray(Predicate[]::new));
+        return session.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    @Override
+    public Long unresolvedDays(Map<String, String> queryParams) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Date> query = builder.createQuery(Date.class);
+
+        Root<Issue> root = query.from(Issue.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        if (queryParams != null) {
+            String device = queryParams.get("device");
+            if (device != null && !device.isEmpty()) {
+                predicates.add(builder.equal(root.get("device").get("id"), device));
+            }
+        }
+        predicates.add(builder.equal(root.get("done"), false));
+        query.select(root.get("createdAt")).where(predicates.toArray(Predicate[]::new));
+        query.orderBy(builder.asc(root.get("createdAt")));
+
+
+        Date earliestCreatedAt = session.createQuery(query).getSingleResult();
+        long diffInMillies = Math.abs(new Date().getTime() - earliestCreatedAt.getTime());
+        return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
 }

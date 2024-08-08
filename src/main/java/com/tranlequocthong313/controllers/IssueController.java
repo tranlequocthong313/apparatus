@@ -12,6 +12,7 @@ import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.services.impl.UserServiceImpl;
 import com.tranlequocthong313.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -60,7 +62,7 @@ public class IssueController {
     }
 
     @GetMapping("/create")
-    public String createIssueForm(Model model, @RequestParam(value= "deviceid") String deviceId) {
+    public String createIssueForm(Model model, @RequestParam(value = "deviceid") String deviceId) {
         model.addAttribute("severities", utils.getNames(Issue.Severity.class));
         Issue issue = new Issue();
         issue.setDevice(deviceService.mapToDevice(deviceService.findById(deviceId)));
@@ -70,9 +72,9 @@ public class IssueController {
 
     @PostMapping("/create")
     public String createIssue(@Valid @ModelAttribute("issue") Issue issue,
-                                       BindingResult result,
-                                       Model model,
-                                       @RequestPart(value = "img", required = false) MultipartFile image) {
+                              BindingResult result,
+                              Model model,
+                              @RequestPart(value = "img", required = false) MultipartFile image) {
         if (result.hasErrors()) {
             model.addAttribute("severities", utils.getNames(Issue.Severity.class));
             model.addAttribute("issue", issue);
@@ -87,6 +89,39 @@ public class IssueController {
         model.addAttribute("severities", utils.getNames(Issue.Severity.class));
         model.addAttribute("issue", issueService.findById(issueId));
         return "issue-update";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteIssue(@PathVariable(value = "id") int id) {
+        issueService.delete(id);
+        return "redirect:/issues";
+    }
+
+    @PostMapping("/bulk-action")
+    public String bulkActionIssue(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
+        if (action.equals("delete")) {
+            Arrays.stream(selectedIds).forEach(id -> issueService.delete(Integer.parseInt(id)));
+        }
+        return "redirect:/issues";
+    }
+
+    @GetMapping("/{id}/resolve")
+    public String createResolveIssueForm(Model model, @PathVariable(value = "id") int id) {
+        model.addAttribute("issue", issueService.findById(id));
+        return "issue-resolve";
+    }
+
+    @PostMapping(path = "/{id}/resolve")
+    public String resolveIssue(
+            @RequestParam Map<String, String> issue,
+            @PathVariable(value = "id") int id) {
+        IssueDto issueDto = issueService.findById(id);
+        issueDto.setCost(Long.parseLong(issue.get("cost")));
+        issueDto.setDone(true);
+        issueDto.setNote(issue.get("note"));
+        issueDto.setResolvedAt(Date.valueOf(issue.get("resolvedAt")));
+        issueService.update(issueDto);
+        return "redirect:/issues";
     }
 
     @PostMapping(path = "/{id}/update")
@@ -109,20 +144,6 @@ public class IssueController {
         issueDto.setDone(issue.getDone());
         issueDto.setNote(issue.getNote());
         issueService.update(issueDto, image);
-        return "redirect:/issues";
-    }
-
-    @GetMapping("/{id}/delete")
-    public String deleteIssue(@PathVariable(value = "id") int id) {
-        issueService.delete(id);
-        return "redirect:/issues";
-    }
-
-    @PostMapping("/bulk-action")
-    public String bulkActionIssue(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
-        if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> issueService.delete(Integer.parseInt(id)));
-        }
         return "redirect:/issues";
     }
 }

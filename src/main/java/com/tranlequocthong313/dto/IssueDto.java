@@ -23,6 +23,7 @@ public class IssueDto {
     private String title;
     private String description;
     private Date occurredAt;
+    private Date resolvedAt;
     private String image;
     private Long cost;
     private Issue.Severity severity;

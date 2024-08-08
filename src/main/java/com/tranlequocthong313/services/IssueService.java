@@ -1,5 +1,6 @@
 package com.tranlequocthong313.services;
 
+import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
 import com.tranlequocthong313.models.Issue;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +12,8 @@ public interface IssueService {
     List<IssueDto> findAll(Map<String, String> queryParams);
 
     IssueDto findById(Integer id);
+
+    List<IssueDto> findByDone(Boolean done);
 
     Issue update(IssueDto threadDto);
 
@@ -33,4 +36,12 @@ public interface IssueService {
     default List<IssueDto> findAll() {
         return findAll(null);
     }
+
+    default Long totalCost() {
+        return totalCost(null);
+    }
+
+    Long totalCost(DeviceDto device);
+
+    Long unresolvedDays(Map<String, String> queryParams);
 }
