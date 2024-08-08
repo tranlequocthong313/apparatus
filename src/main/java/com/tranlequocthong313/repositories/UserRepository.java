@@ -6,6 +6,9 @@ package com.tranlequocthong313.repositories;
 
 import com.tranlequocthong313.models.User;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author tranlequocthong313
@@ -13,4 +16,5 @@ import com.tranlequocthong313.models.User;
 public interface UserRepository extends BaseRepository<User, Integer> {
 
 	User getUserByUsername(String username);
+	List<User> findByRoles(String[] roles);
 }

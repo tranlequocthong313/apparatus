@@ -43,14 +43,9 @@
                         <span class="d-sm-inline d-none">
                             <spring:message code="welcome" /> <security:authentication property="principal.username"/>
                         </span>
-                    </li>
-                </security:authorize>
-                <security:authorize access="!isAuthenticated()">
-                    <li class="nav-item d-flex align-items-center mx-3">
-                        <a href="<c:url value='/users/login' />" class="nav-link text-body font-weight-bold px-0 mb-0">
-                            <i class="fa fa-user me-sm-1"></i>
-                            <span class="d-sm-inline d-none"><spring:message code="login" /></span>
-                        </a>
+                        <div class="avatar avatar-xl position-relative">
+                            <img src="${currentUser.avatar}" alt="profile_image" class="w-50 border-radius-lg shadow-sm">
+                        </div>
                     </li>
                 </security:authorize>
             </ul>

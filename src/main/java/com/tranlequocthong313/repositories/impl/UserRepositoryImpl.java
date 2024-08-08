@@ -4,9 +4,6 @@
  */
 package com.tranlequocthong313.repositories.impl;
 
-import com.tranlequocthong313.exceptions.DuplicateEntryException;
-import com.tranlequocthong313.exceptions.UserNotFoundException;
-import com.tranlequocthong313.models.DeviceCategory;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.UserRepository;
 
@@ -111,6 +108,23 @@ public class UserRepositoryImpl implements UserRepository {
         Query query = session.getNamedQuery("User.findByUsername");
         query.setParameter("username", username);
         return (User) query.getResultList().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public List<User> findByRoles(String[] roles) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+
+        Root<User> root = criteria.from(User.class);
+
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        for (String role : roles) {
+            predicates.add(builder.like(root.get("userRole"), role));
+        }
+        criteria.where(builder.or(predicates.toArray(new Predicate[0])));
+        Query<User> query = session.createQuery(criteria);
+        return (List<User>) query.getResultList();
     }
 
     @Override

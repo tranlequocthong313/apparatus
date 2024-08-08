@@ -6,6 +6,8 @@ package com.tranlequocthong313.repositories.impl;
 
 import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.DeviceCategory;
+import com.tranlequocthong313.models.Issue;
+import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.BaseRepository;
 import com.tranlequocthong313.utils.Utils;
 import org.hibernate.Session;
@@ -26,7 +28,7 @@ import java.util.Optional;
  */
 @Repository
 @Transactional
-public class DeviceRepositoryImpl implements BaseRepository<Device, String> {
+public class IssueRepositoryImpl implements BaseRepository<Issue, Integer> {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
@@ -34,12 +36,12 @@ public class DeviceRepositoryImpl implements BaseRepository<Device, String> {
     private Utils utils;
 
     @Override
-    public <S extends Device> List<S> findAll(Map<String, String> queryParams) {
+    public <S extends Issue> List<S> findAll(Map<String, String> queryParams) {
         Session session = sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Device> criteria = builder.createQuery(Device.class);
+        CriteriaQuery<Issue> criteria = builder.createQuery(Issue.class);
 
-        Root<Device> root = criteria.from(Device.class);
+        Root<Issue> root = criteria.from(Issue.class);
 
         int page = 1;
 
@@ -50,61 +52,58 @@ public class DeviceRepositoryImpl implements BaseRepository<Device, String> {
             page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
         }
 
-        Query<Device> query = session.createQuery(criteria);
+        Query<Issue> query = session.createQuery(criteria);
         utils.pagniate(query, page);
         return (List<S>) query.getResultList();
     }
 
-    private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<Device> root) {
+    private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<Issue> root) {
         List<Predicate> predicates = new ArrayList<Predicate>();
         if (queryParams != null) {
             String q = queryParams.get("q");
             if (q != null && !q.isEmpty()) {
-                Join<Device, DeviceCategory> deviceCategoryJoin = root.join("deviceCategory");
-                predicates.add(builder.or(
-                        builder.like(builder.lower(deviceCategoryJoin.<String>get("name")), "%" + q.toLowerCase() + "%"),
-                        builder.like(builder.lower(root.<String>get("id")), "%" + q.toLowerCase() + "%")
-                ));
+                Join<Issue, Device> deviceJoin = root.join("device");
+                Join<Device, DeviceCategory> deviceCategoryJoin = deviceJoin.join("deviceCategory");
+                Join<Issue, User> userJoin = root.join("user");
+                predicates.add(
+                        builder.or(
+                                builder.like(builder.lower(root.<String>get("title")), "%" + q.toLowerCase() + "%"),
+                                builder.like(builder.lower(root.<String>get("description")), "%" + q.toLowerCase() + "%"),
+                                builder.like(builder.lower(root.<String>get("note")), "%" + q.toLowerCase() + "%"),
+                                builder.like(builder.lower(deviceCategoryJoin.<String>get("name")), "%" + q.toLowerCase() + "%"),
+                                builder.like(builder.lower(userJoin.<String>get("fullName")), "%" + q.toLowerCase() + "%"),
+                                builder.equal(deviceJoin.get("id"), q.toLowerCase())
+                        )
+                );
             }
-            String type = queryParams.get("type");
-            if (type != null && !type.isEmpty()) {
-                Join<Device, DeviceCategory> deviceCategoryJoin = root.join("deviceCategory");
-                predicates.add(builder.equal(deviceCategoryJoin.get("deviceType"), Integer.parseInt(type)));
-            }
-            String location = queryParams.get("location");
-            if (location != null && !location.isEmpty()) {
-                predicates.add(builder.equal(root.get("location"), Integer.parseInt(location)));
-            }
-            String provider = queryParams.get("provider");
-            if (provider != null && !provider.isEmpty()) {
-                predicates.add(builder.equal(root.get("provider"), Integer.parseInt(provider)));
-            }
-            String status = queryParams.get("status");
-            if (status != null && !status.isEmpty()) {
-                predicates.add(builder.equal(root.get("status"), Device.Status.valueOf(status)));
+            String severity = queryParams.get("severity");
+            if (severity != null && !severity.isEmpty()) {
+                predicates.add(
+                        builder.like(root.get("severity"), severity)
+                );
             }
         }
         return predicates;
     }
 
     @Override
-    public Optional<Device> findById(String id) {
+    public Optional<Issue> findById(Integer id) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        return Optional.ofNullable(session.get(Device.class, id));
+        return Optional.ofNullable(session.get(Issue.class, id));
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Integer id) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        Device t = getReferenceById(id);
+        Issue t = getReferenceById(id);
         session.delete(t);
     }
 
     @Override
-    public Device save(Device device) {
+    public Issue save(Issue provider) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        session.saveOrUpdate(device);
-        return device;
+        session.saveOrUpdate(provider);
+        return provider;
     }
 
     @Override
@@ -112,7 +111,7 @@ public class DeviceRepositoryImpl implements BaseRepository<Device, String> {
         Session session = sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
-        Root<Device> root = criteriaQuery.from(Device.class);
+        Root<Issue> root = criteriaQuery.from(Issue.class);
 
         criteriaQuery
                 .select(builder.count(root))
@@ -125,4 +124,3 @@ public class DeviceRepositoryImpl implements BaseRepository<Device, String> {
         return session.createQuery(criteriaQuery).getSingleResult();
     }
 }
-

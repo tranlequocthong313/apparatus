@@ -97,6 +97,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         registry.addFormatter(new UserFormatter());
         registry.addFormatter(new ProviderFormatter());
         registry.addFormatter(new DeviceFormatter());
+        registry.addFormatter(new DaysOfWeekFormatter());
     }
 
 }

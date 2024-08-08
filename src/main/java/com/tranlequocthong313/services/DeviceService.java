@@ -21,6 +21,8 @@ public interface DeviceService {
 
     DeviceDto findById(String id);
 
+    Device mapToDevice(DeviceDto deviceDto);
+
     Device update(DeviceDto threadDto);
 
     void save(Device thread);

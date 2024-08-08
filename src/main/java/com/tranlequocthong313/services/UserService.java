@@ -42,5 +42,9 @@ public interface UserService extends UserDetailsService {
         return findAll(null);
     }
 
-    List<UserDto> findByRole(User.UserRole userRole);
+    default List<User> findByRole(User.UserRole userRole) {
+        return findByRoles(new User.UserRole[]{userRole});
+    }
+
+    List<User> findByRoles(User.UserRole[] userRoles);
 }

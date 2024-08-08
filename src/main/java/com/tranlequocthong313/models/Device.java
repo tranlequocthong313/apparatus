@@ -22,6 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+// TODO: Change Many to One relationships to Eager
 /**
  * @author tranlequocthong313
  */
@@ -43,7 +44,7 @@ import org.springframework.format.annotation.DateTimeFormat;
         @NamedQuery(name = "Device.findByStatus", query = "SELECT d FROM Device d WHERE d.status = :status"),
         @NamedQuery(name = "Device.findByCreatedAt", query = "SELECT d FROM Device d WHERE d.createdAt = :createdAt"),
         @NamedQuery(name = "Device.findByUpdatedAt", query = "SELECT d FROM Device d WHERE d.updatedAt = :updatedAt")})
-@JsonIgnoreProperties(value = {"repairSet", "locationHistorySet", "maintenanceSet"})
+@JsonIgnoreProperties(value = {"repairSet", "locationHistorySet", "maintenanceSet", "issueSet"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -134,6 +135,8 @@ public class Device implements Serializable {
     private User user;
     @OneToMany(mappedBy = "device")
     private Set<Maintenance> maintenanceSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "device")
+    private Set<Issue> issueSet;
 
     public Device(String id) {
         this.id = id;
