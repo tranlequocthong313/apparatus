@@ -77,8 +77,7 @@ public class IssueRepositoryImpl implements IssueRepository {
             }
             String device = queryParams.get("device");
             if (device != null && !device.isEmpty()) {
-                Join<Issue, Device> deviceJoin = root.join("device");
-                predicates.add(builder.equal(deviceJoin.get("id"), device));
+                predicates.add(builder.equal(root.get("device").get("id"), device));
             }
             String severity = queryParams.get("severity");
             if (severity != null && !severity.isEmpty()) {
@@ -146,8 +145,7 @@ public class IssueRepositoryImpl implements IssueRepository {
             predicates.add(builder.equal(root.get("done"), Boolean.valueOf(done)));
             String device = queryParams.get("device");
             if (device != null && !device.isEmpty()) {
-                Join<Issue, Device> issueDeviceJoin = root.join("device");
-                predicates.add(builder.equal(issueDeviceJoin.get("id"), device));
+                predicates.add(builder.equal(root.get("device").get("id"), device));
             }
         } else {
             predicates.add(builder.equal(root.get("done"), true));

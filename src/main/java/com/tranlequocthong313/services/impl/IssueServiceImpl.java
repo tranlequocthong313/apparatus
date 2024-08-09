@@ -6,9 +6,7 @@ package com.tranlequocthong313.services.impl;
 
 import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
-import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.Issue;
-import com.tranlequocthong313.repositories.BaseRepository;
 import com.tranlequocthong313.repositories.IssueRepository;
 import com.tranlequocthong313.services.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ public class IssueServiceImpl implements IssueService {
         return issues.stream().map(issue -> mapToIssueDto(issue)).collect(Collectors.toList());
     }
 
-    private IssueDto mapToIssueDto(Issue issue) {
+    public IssueDto mapToIssueDto(Issue issue) {
         return IssueDto.builder()
                 .id(issue.getId())
                 .title(issue.getTitle())
@@ -117,7 +115,7 @@ public class IssueServiceImpl implements IssueService {
         return issue;
     }
 
-    private Issue mapToIssue(IssueDto issueDto) {
+    public Issue mapToIssue(IssueDto issueDto) {
         return Issue.builder()
                 .id(issueDto.getId())
                 .title(issueDto.getTitle())

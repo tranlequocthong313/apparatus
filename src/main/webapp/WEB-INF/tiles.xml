@@ -231,4 +231,30 @@
     </definition>
     <!--    END ISSUES   -->
 
+    <!--    REPAIRS    -->
+    <definition name="repairs" extends="baseLayout">
+        <put-attribute name="title" value="Repairs"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/repairs/repairs.jsp"/>
+    </definition>
+
+    <definition name="repair" extends="baseLayout">
+        <put-attribute name="title" value="Repair"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/repairs/repair.jsp"/>
+    </definition>
+
+    <definition name="repair-create" extends="baseLayout">
+        <put-attribute name="title" value="Create Repair"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/repairs/repair-create-update.jsp"/>
+    </definition>
+
+    <definition name="repair-update" extends="baseLayout">
+        <put-attribute name="title" value="Update Repair"/>
+        <put-attribute name="main"
+                       value="/WEB-INF/pages/repairs/repair-create-update.jsp"/>
+    </definition>
+    <!--    END REPAIRS   -->
+
 </tiles-definitions>

@@ -51,8 +51,8 @@ public class Device implements Serializable {
 
     public enum Status {
         OPERATING,
-        FIXING,
         ERROR,
+        MAINTENANCE,
         SOLD;
     }
 

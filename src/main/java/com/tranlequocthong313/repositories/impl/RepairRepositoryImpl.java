@@ -4,9 +4,9 @@
  */
 package com.tranlequocthong313.repositories.impl;
 
-import com.tranlequocthong313.models.Device;
-import com.tranlequocthong313.models.LocationHistory;
-import com.tranlequocthong313.repositories.BaseRepository;
+import com.tranlequocthong313.models.Repair;
+import com.tranlequocthong313.models.RepairCategory;
+import com.tranlequocthong313.repositories.RepairRepository;
 import com.tranlequocthong313.utils.Utils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 @Repository
 @Transactional
-public class LocationHistoryRepositoryImpl implements BaseRepository<LocationHistory, Integer> {
+public class RepairRepositoryImpl implements RepairRepository {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
@@ -34,12 +34,12 @@ public class LocationHistoryRepositoryImpl implements BaseRepository<LocationHis
     private Utils utils;
 
     @Override
-    public <S extends LocationHistory> List<S> findAll(Map<String, String> queryParams) {
+    public <S extends Repair> List<S> findAll(Map<String, String> queryParams) {
         Session session = sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<LocationHistory> criteria = builder.createQuery(LocationHistory.class);
+        CriteriaQuery<Repair> criteria = builder.createQuery(Repair.class);
 
-        Root<LocationHistory> root = criteria.from(LocationHistory.class);
+        Root<Repair> root = criteria.from(Repair.class);
 
         int page = 1;
 
@@ -50,50 +50,55 @@ public class LocationHistoryRepositoryImpl implements BaseRepository<LocationHis
             page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
         }
 
-        Query<LocationHistory> query = session.createQuery(criteria);
+        Query<Repair> query = session.createQuery(criteria);
         utils.pagniate(query, page);
         return (List<S>) query.getResultList();
     }
 
-    private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<LocationHistory> root) {
+    private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<Repair> root) {
         List<Predicate> predicates = new ArrayList<Predicate>();
         if (queryParams != null) {
             String q = queryParams.get("q");
             if (q != null && !q.isEmpty()) {
-                Join<LocationHistory, Device> locationHistoryDeviceJoin = root.join("device");
                 predicates.add(
                         builder.or(
+                                builder.equal(root.<String>get("device").get("id"), q),
                                 builder.like(builder.lower(root.<String>get("note")), "%" + q.toLowerCase() + "%"),
-                                builder.equal(root.<String>get("device").get("id"), q) // NOTE: Be careful this may cause problems
+                                builder.like(builder.lower(root.<String>get("user").get("fullName")), "%" + q.toLowerCase() + "%")
                         )
                 );
             }
-            String location = queryParams.get("location");
-            if (location != null && !location.isEmpty()) {
-                predicates.add(builder.equal(root.get("location"), Integer.parseInt(location)));
+            String repairedBy = queryParams.get("repairedby");
+            if (repairedBy != null && !repairedBy.isEmpty()) {
+                predicates.add(builder.equal(root.get("repairedBy"), Repair.RepairedBy.valueOf(repairedBy)));
+            }
+            String category = queryParams.get("category");
+            if (category != null && !category.isEmpty()) {
+                Join<Repair, RepairCategory> repairRepairCategoryJoin = root.join("repairCategorySet", JoinType.INNER);
+                predicates.add(builder.equal(repairRepairCategoryJoin.get("id"), category));
             }
         }
         return predicates;
     }
 
     @Override
-    public Optional<LocationHistory> findById(Integer id) {
+    public Optional<Repair> findById(Integer id) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        return Optional.ofNullable(session.get(LocationHistory.class, id));
+        return Optional.ofNullable(session.get(Repair.class, id));
     }
 
     @Override
     public void delete(Integer id) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        LocationHistory t = getReferenceById(id);
+        Repair t = getReferenceById(id);
         session.delete(t);
     }
 
     @Override
-    public LocationHistory save(LocationHistory locationHistory) {
+    public Repair save(Repair repair) {
         Session session = sessionFactory.getObject().getCurrentSession();
-        session.saveOrUpdate(locationHistory);
-        return locationHistory;
+        session.saveOrUpdate(repair);
+        return repair;
     }
 
     @Override
@@ -101,7 +106,7 @@ public class LocationHistoryRepositoryImpl implements BaseRepository<LocationHis
         Session session = sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
-        Root<LocationHistory> root = criteriaQuery.from(LocationHistory.class);
+        Root<Repair> root = criteriaQuery.from(Repair.class);
 
         criteriaQuery
                 .select(builder.count(root))
@@ -111,6 +116,23 @@ public class LocationHistoryRepositoryImpl implements BaseRepository<LocationHis
                                 builder,
                                 root
                         ).toArray(new Predicate[0])));
+        return session.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    @Override
+    public Long totalCost(Map<String, String> queryParams) {
+        Session session = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<Repair> root = criteriaQuery.from(Repair.class);
+        List<Predicate> predicates = new ArrayList<>();
+        if (queryParams != null) {
+            String device = queryParams.get("device");
+            if (device != null && !device.isEmpty()) {
+                predicates.add(builder.equal(root.get("device").get("id"), device));
+            }
+        }
+        criteriaQuery.select(builder.sum(root.get("cost"))).where(predicates.toArray(Predicate[]::new));
         return session.createQuery(criteriaQuery).getSingleResult();
     }
 }

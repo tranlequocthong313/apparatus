@@ -7,6 +7,7 @@ package com.tranlequocthong313.controllers;
 import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.LocationHistory;
+import com.tranlequocthong313.models.Repair;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.services.*;
 import com.tranlequocthong313.services.DeviceService;
@@ -51,6 +52,8 @@ public class DeviceController {
     @Autowired
     private IssueService issueService;
     @Autowired
+    private RepairService repairService;
+    @Autowired
     private LocationHistoryService locationHistoryService;
     @Autowired
     private Utils utils;
@@ -79,7 +82,7 @@ public class DeviceController {
     @GetMapping("/{id}")
     public String getDevice(@PathVariable(value = "id") String id, Model model) {
         DeviceDto deviceDto = deviceService.findById(id);
-        model.addAttribute("totalCost", issueService.totalCost(deviceDto));
+        model.addAttribute("totalCost", repairService.totalCost(deviceDto));
         model.addAttribute("unresolvedDays", issueService.unresolvedDays(Map.of("device", id)));
         model.addAttribute("totalIssue", issueService.count(Map.of("device", id)));
         model.addAttribute("device", deviceDto);
