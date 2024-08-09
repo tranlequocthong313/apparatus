@@ -4,7 +4,9 @@
  */
 package com.tranlequocthong313.controllers;
 
+import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
+import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.Issue;
 import com.tranlequocthong313.services.DeviceService;
 import com.tranlequocthong313.services.IssueService;
@@ -61,8 +63,8 @@ public class IssueController {
         return "issue";
     }
 
-    @GetMapping("/create")
-    public String createIssueForm(Model model, @RequestParam(value = "deviceid") String deviceId) {
+    @GetMapping("/device/{deviceId}/create")
+    public String createIssueForm(Model model, @PathVariable(value = "deviceId") String deviceId) {
         model.addAttribute("severities", utils.getNames(Issue.Severity.class));
         Issue issue = new Issue();
         issue.setDevice(deviceService.mapToDevice(deviceService.findById(deviceId)));
@@ -81,6 +83,9 @@ public class IssueController {
             return "issue-create";
         }
         issueService.save(issue, image);
+        DeviceDto deviceDto = deviceService.findById(issue.getDevice().getId());
+        deviceDto.setStatus(Device.Status.ERROR);
+        deviceService.update(deviceDto);
         return "redirect:/issues";
     }
 

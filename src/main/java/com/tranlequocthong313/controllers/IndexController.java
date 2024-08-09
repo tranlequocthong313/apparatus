@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import com.tranlequocthong313.services.DeviceService;
 import com.tranlequocthong313.services.IssueService;
+import com.tranlequocthong313.services.RepairService;
 import com.tranlequocthong313.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,8 @@ public class IndexController {
     private UserService userService;
     @Autowired
     private IssueService issueService;
+    @Autowired
+    private RepairService repairService;
 
     @ModelAttribute
     public void commAttrs(Model model, HttpServletRequest request, Principal principal) {
@@ -49,6 +52,7 @@ public class IndexController {
                 new CategoryDto("/providers", "factory", "provider"),
                 new CategoryDto("/maintenances", "engineering", "maintenance", "maintenance"),
                 new CategoryDto("/issues", "bug_report", "issue"),
+                new CategoryDto("/repairs", "home_repair_service", "repair"),
                 new CategoryDto("/thread-categories", "comment", "threadCategory", "other"),
                 new CategoryDto("/users", "people", "user"),
                 new CategoryDto("/users/logout", "logout", "logout", "account")
@@ -61,7 +65,7 @@ public class IndexController {
     public String index(Locale locale, Model model) {
         model.addAttribute("totalDevices", deviceService.count());
         model.addAttribute("totalIssues", issueService.findByDone(false).size());
-        model.addAttribute("totalRepairCost", issueService.totalCost());
+        model.addAttribute("totalRepairCost", repairService.totalCost());
         model.addAttribute("totalUsers", userService.count());
         return "index";
     }

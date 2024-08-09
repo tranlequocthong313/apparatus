@@ -10,7 +10,6 @@ import java.util.Map;
 
 public interface IssueService {
     List<IssueDto> findAll(Map<String, String> queryParams);
-
     IssueDto findById(Integer id);
 
     List<IssueDto> findByDone(Boolean done);
@@ -44,4 +43,6 @@ public interface IssueService {
     Long totalCost(DeviceDto device);
 
     Long unresolvedDays(Map<String, String> queryParams);
+
+    Issue mapToIssue(IssueDto issue);
 }

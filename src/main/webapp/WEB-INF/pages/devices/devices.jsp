@@ -202,7 +202,15 @@
                                     </td>
                                     <td class="align-middle">
                                         <a class="text-dark font-weight-bold text-xs"
-                                           href="<c:url value='/issues/create?deviceid=${device.id}' />"
+                                           href="<c:url value='/repairs/device/${device.id}/create' />"
+                                           data-toggle="tooltip"
+                                           data-original-title="<spring:message code="add.new.repair"/>"
+                                        >
+                                            <spring:message code="add.new.repair"/>
+                                        </a>
+                                        |
+                                        <a class="text-dark font-weight-bold text-xs"
+                                           href="<c:url value='/issues/device/${device.id}/create' />"
                                            data-toggle="tooltip"
                                            data-original-title="<spring:message code="add.new.issue"/>"
                                         >

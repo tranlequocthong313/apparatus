@@ -34,7 +34,7 @@
                 </div>
                 <div class="text-end pt-1">
                     <p class="text-sm mb-0 text-capitalize">
-                        <spring:message code="dashboard.devicesWithIssues"/>
+                        <spring:message code="dashboard.totalIssues"/>
                     </p>
                     <h4 class="mb-0">${totalIssues}</h4>
                 </div>
@@ -768,6 +768,7 @@
             },
         },
     });
+
 </script>
 
 

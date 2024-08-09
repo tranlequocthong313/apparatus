@@ -16,27 +16,39 @@
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                     <h6 class="text-white text-capitalize ps-3">
-                        <spring:message code="issue.list.title"/>
+                        <spring:message code="repairs.title"/>
                     </h6>
                 </div>
             </div>
             <div class="card-body px-0 pb-2">
                 <!-- Search Form -->
-                <form action="<c:url value='/issues' />" method="get" class="mx-4">
+                <form action="<c:url value='/repairs' />" method="get" class="mx-4">
                     <div class="row">
-                        <div class="col-md-4 mb-1">
+                        <div class="col-md-6 mb-1">
                             <div class="input-group input-group-outline">
                                 <input type="text" name="q" id="search" value="${searchQuery}" class="form-control"
                                        placeholder="<spring:message code='search' />" aria-label="Search"/>
                             </div>
                         </div>
-                        <div class="col-md-2 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="input-group input-group-outline">
-                                <select name="type" id="type" class="form-control">
-                                    <option value=""><spring:message code="all.issue.severity"/></option>
-                                    <c:forEach items="${severities}" var="se">
-                                        <option value="${se}" ${severity == se ? 'selected' : ''}>
-                                            <spring:message code="severity.${se.toLowerCase()}"/>
+                                <select name="category" id="category" class="form-control">
+                                    <option value="">-- <spring:message code="repairCategory.select"/> --</option>
+                                    <c:forEach items="${repairCategories}" var="c">
+                                        <option value="${c.id}" ${category == c.id ? 'selected' : ''}>
+                                            ${c.name}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="input-group input-group-outline">
+                                <select name="repairedby" id="repair" class="form-control">
+                                    <option value=""><spring:message code="all.repairedBys"/></option>
+                                    <c:forEach items="${repairedBys}" var="r">
+                                        <option value="${r}" ${repairedBy == r ? 'selected' : ''}>
+                                            <spring:message code="repairedBy.${r.toLowerCase()}"/>
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -50,9 +62,8 @@
                     </div>
                 </form>
 
-
-                <form id="bulkActionForm" action="<c:url value='/issues/bulk-action' />" method="post">
-
+                <!-- Bulk Action Form -->
+                <form id="bulkActionForm" action="<c:url value='/repairs/bulk-action' />" method="post">
                     <div class="mx-4 d-flex  mb-1">
                         <div class="col-md-2">
                             <div class=" input-group input-group-outline">
@@ -69,6 +80,7 @@
                             </button>
                         </div>
                     </div>
+
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
                             <thead>
@@ -77,153 +89,107 @@
                                     <input type="checkbox" id="selectAll">
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
-                                    <a href="<c:url value='/issues?sort=id&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.id"/>
+                                    <a href="<c:url value='/repairs?sort=id&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="id"/>
                                         <i class="material-icons">${param.sort eq 'id' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                     <spring:message code="device"/>
                                 </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
-                                    <a href="<c:url value='/issues?sort=title&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.title"/>
-                                        <i class="material-icons">${param.sort eq 'title' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <spring:message code="issue"/>
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    <a href="<c:url value='/repairs?sort=receptionDate&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="receptionDate"/>
+                                        <i class="material-icons">${param.sort eq 'receptionDate' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=description&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.description"/>
-                                        <i class="material-icons">${param.sort eq 'description' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    <a href="<c:url value='/repairs?sort=completedDate&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="completedDate"/>
+                                        <i class="material-icons">${param.sort eq 'completedDate' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=occurredAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.occurredAt"/>
-                                        <i class="material-icons">${param.sort eq 'occurredAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
-                                    </a>
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=cost&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.cost"/>
+                                    <a href="<c:url value='/repairs?sort=cost&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="cost"/>
                                         <i class="material-icons">${param.sort eq 'cost' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=done&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.done"/>
-                                        <i class="material-icons">${param.sort eq 'done' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
+                                    <a href="<c:url value='/repairs?sort=repairedBy&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                        <spring:message code="repairedBy"/>
+                                        <i class="material-icons">${param.sort eq 'repairedBy' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=resolvedAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.resolvedAt"/>
-                                        <i class="material-icons">${param.sort eq 'resolvedAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
-                                    </a>
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <spring:message code="creator"/>
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=note&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                    <a href="<c:url value='/repairs?sort=note&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
                                         <spring:message code="note"/>
                                         <i class="material-icons">${param.sort eq 'note' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=severity&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
-                                        <spring:message code="issue.severity"/>
-                                        <i class="material-icons">${param.sort eq 'severity' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
-                                    </a>
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=createdAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                    <a href="<c:url value='/repairs?sort=createdAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
                                         <spring:message code="created.at"/>
                                         <i class="material-icons">${param.sort eq 'createdAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    <a href="<c:url value='/issues?sort=updatedAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
+                                    <a href="<c:url value='/repairs?sort=updatedAt&direction=${param.direction eq \'asc\' ? \'desc\' : \'asc\'}' />">
                                         <spring:message code="updated.at"/>
                                         <i class="material-icons">${param.sort eq 'updatedAt' && param.direction eq 'asc' ? 'arrow_upward' : 'arrow_downward'}</i>
                                     </a>
                                 </th>
-                                <th class="text-secondary opacity-7">
-                                </th>
+                                <th class="text-secondary opacity-7"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${issues}" var="issue">
+                            <c:forEach items="${repairs}" var="repair">
                                 <tr>
                                     <td class="ps-3">
-                                        <input type="checkbox" name="selectedIds" value="${issue.id}"
+                                        <input type="checkbox" name="selectedIds" value="${repair.id}"
                                                class="selectItem">
                                     </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.id}</p>
+                                    <td class="ps-3">
+                                        <p class="text-xs font-weight-bold mb-0">${repair.id}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${issue.device.id}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.title}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.description}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.occurredAt}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.cost}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.done}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.resolvedAt}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.device.id}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${issue.user.fullName}</p>
-                                    </td>
-                                    <td class="psg-3">
-                                        <p class="text-xs font-weight-bold mb-0">${issue.note}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.issue.id}</p>
                                     </td>
                                     <td>
-                                        <c:choose>
-                                            <c:when test="${issue.severity == 'LOW'}">
-                                                <p class="text-xs font-weight-bold mb-0 text-success">${issue.severity}</p>
-                                            </c:when>
-                                            <c:when test="${issue.severity == 'MEDIUM'}">
-                                                <p class="text-xs font-weight-bold mb-0 text-warning">${issue.severity}</p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p class="text-xs font-weight-bold mb-0 text-danger">${issue.severity}</p>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.receptionDate}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${issue.createdAt}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.completedDate}</p>
                                     </td>
                                     <td>
-                                        <p class="text-xs font-weight-bold mb-0">${issue.updatedAt}</p>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.cost}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.repairedBy}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.note}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.createdAt}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">${repair.updatedAt}</p>
                                     </td>
                                     <td class="align-middle">
-                                        <c:if test="${issue.done == false}">
-                                            <a href="<c:url value='/repairs/issue/${issue.id}/create' />"
-                                               class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
-                                               data-original-title="<spring:message code='resolve' />">
-                                                <spring:message code="resolve"/>
-                                            </a>
-                                            |
-                                        </c:if>
-                                        <a href="<c:url value='/issues/${issue.id}/update' />"
+                                        <a href="<c:url value='/repairs/${repair.id}/update' />"
                                            class="text-dark font-weight-bold text-xs" data-toggle="tooltip"
                                            data-original-title="<spring:message code='edit' />">
                                             <spring:message code="edit"/>
                                         </a>
                                         |
-                                        <a href="<c:url value='/issues/${issue.id}/delete' />"
+                                        <a href="<c:url value='/repairs/${repair.id}/delete' />"
                                            class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
                                            data-original-title="<spring:message code='delete' />"
                                            onclick="return confirm('<spring:message code='confirm.delete'/>');">
@@ -244,26 +210,23 @@
                 <c:if test="${currentPage > 1}">
                     <li class="page-item">
                         <a class="page-link"
-                           href="?q=${searchQuery}&type=${type}&location=${location}&provider=${provider}&status=${status}&page=${currentPage - 1}"
+                           href="?q=${searchQuery}&page=${currentPage - 1}"
                            aria-label="Previous">
-                                    <span aria-hidden="true"><span
-                                            class="material-icons">keyboard_arrow_left</span></span>
+                            <span aria-hidden="true"><span class="material-icons">keyboard_arrow_left</span></span>
                         </a>
                     </li>
                 </c:if>
                 <c:forEach var="i" begin="1" end="${totalPages}">
                     <li class="page-item ${i == currentPage ? 'active' : ''}">
-                        <a class="page-link"
-                           href="?q=${searchQuery}&type=${type}&location=${location}&provider=${provider}&status=${status}&page=${i}">${i}</a>
+                        <a class="page-link" href="?q=${searchQuery}&page=${i}">${i}</a>
                     </li>
                 </c:forEach>
                 <c:if test="${currentPage < totalPages}">
                     <li class="page-item">
                         <a class="page-link"
-                           href="?q=${searchQuery}&type=${type}&location=${location}&provider=${provider}&status=${status}&page=${currentPage + 1}"
+                           href="?q=${searchQuery}&page=${currentPage + 1}"
                            aria-label="Next">
-                                    <span aria-hidden="true"><span
-                                            class="material-icons">keyboard_arrow_right</span></span>
+                            <span aria-hidden="true"><span class="material-icons">keyboard_arrow_right</span></span>
                         </a>
                     </li>
                 </c:if>
@@ -271,7 +234,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     // JavaScript to handle select all/none functionality and enable/disable execute button
@@ -307,5 +269,4 @@
         });
     });
 </script>
-
 
