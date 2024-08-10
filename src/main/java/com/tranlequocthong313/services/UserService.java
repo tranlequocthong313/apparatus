@@ -36,7 +36,11 @@ public interface UserService extends UserDetailsService {
 
     User getCurrentUser();
 
-    Object count();
+	default Long count() {
+		return count(null);
+	}
+
+	Long count(Map<String, String> queryParams);
 
     default List<UserDto> findAll() {
         return findAll(null);
