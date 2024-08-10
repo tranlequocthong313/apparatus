@@ -24,8 +24,6 @@ import java.util.Map;
 /**
  * @author tranlequocthong313
  */
-// TODO: fix location and location detail when creating new ones
-// TODO: add more filter options
 // TODO: add device specs
 @Controller
 @RequestMapping("/devices")
