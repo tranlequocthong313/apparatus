@@ -111,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findByRoles(String[] roles) {
+    public List<User> findByRoles(User.UserRole[] roles) {
         Session session = sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
@@ -119,9 +119,11 @@ public class UserRepositoryImpl implements UserRepository {
         Root<User> root = criteria.from(User.class);
 
         List<Predicate> predicates = new ArrayList<Predicate>();
-        for (String role : roles) {
-            predicates.add(builder.like(root.get("userRole"), role));
+        List<Predicate> orPredicates = new ArrayList<Predicate>();
+        for (User.UserRole role : roles) {
+            orPredicates.add(builder.equal(root.get("userRole"), role));
         }
+        predicates.add(builder.or(orPredicates.toArray(Predicate[]::new)));
         criteria.where(builder.or(predicates.toArray(new Predicate[0])));
         Query<User> query = session.createQuery(criteria);
         return (List<User>) query.getResultList();

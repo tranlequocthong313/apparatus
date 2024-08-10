@@ -5,9 +5,11 @@
 package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.LocationDto;
+import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.Location;
+import com.tranlequocthong313.services.ActivityLogService;
 import com.tranlequocthong313.services.LocationService;
-import com.tranlequocthong313.services.DeviceTypeService;
+import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,10 @@ public class LocationController {
     private LocationService locationService;
     @Autowired
     private Utils utils;
+    @Autowired
+    private ActivityLogService activityLogService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public String getLocations(@RequestParam Map<String, String> queryParams, Model model) {
@@ -59,14 +65,20 @@ public class LocationController {
 
     @PostMapping("/create")
     public String createLocation(@Valid @ModelAttribute("location") Location location,
-                                       BindingResult result,
-                                       Model model,
-                                       @RequestPart(value = "img", required = false) MultipartFile image) {
+                                 BindingResult result,
+                                 Model model,
+                                 @RequestPart(value = "img", required = false) MultipartFile image) {
         if (result.hasErrors()) {
             model.addAttribute("location", location);
             return "location-create";
         }
         locationService.save(location, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new location " + location.getId())
+                        .build()
+        );
         return "redirect:/locations";
     }
 
@@ -91,19 +103,39 @@ public class LocationController {
         locationDto.setBuilding(location.getBuilding());
         locationDto.setNote(location.getNote());
         locationService.update(locationDto, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " updated a location " + location.getId())
+                        .build()
+        );
         return "redirect:/locations";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteLocation(@PathVariable(value = "id") int id) {
         locationService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a location " + id)
+                        .build()
+        );
         return "redirect:/locations";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionLocation(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> locationService.delete(Integer.parseInt(id)));
+            Arrays.stream(selectedIds).forEach(id -> {
+                locationService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a location " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/locations";
     }

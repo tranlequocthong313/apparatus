@@ -25,23 +25,23 @@
 
         <form:form method="POST" modelAttribute="locationDetail" action="${action}" role="form"
                    enctype="multipart/form-data">
+            <label class="form-label" for="floor"><spring:message code="floor"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="floor"><spring:message code="floor"/></label>
                 <form:input path="floor" id="floor" class="form-control"/>
                 <form:errors path="floor" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="room"><spring:message code="room"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="room"><spring:message code="room"/></label>
                 <form:input path="room" id="room" class="form-control"/>
                 <form:errors path="room" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="note"><spring:message code="note"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="note"><spring:message code="note"/></label>
                 <form:input path="note" id="note" class="form-control"/>
                 <form:errors path="note" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="location"><spring:message code="select.location"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="location"><spring:message code="select.location"/></label>
                 <form:select path="location.id" id="location" class="form-control">
                     <form:option value="">
                         <spring:message code='select.location' />

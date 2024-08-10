@@ -5,8 +5,11 @@
 package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.ProviderDto;
+import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.Provider;
+import com.tranlequocthong313.services.ActivityLogService;
 import com.tranlequocthong313.services.ProviderService;
+import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,10 @@ public class ProviderController {
 
     @Autowired
     private ProviderService providerService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ActivityLogService activityLogService;
     @Autowired
     private Utils utils;
 
@@ -58,14 +65,20 @@ public class ProviderController {
 
     @PostMapping("/create")
     public String createProvider(@Valid @ModelAttribute("provider") Provider provider,
-                                       BindingResult result,
-                                       Model model,
-                                       @RequestPart(value = "img", required = false) MultipartFile image) {
+                                 BindingResult result,
+                                 Model model,
+                                 @RequestPart(value = "img", required = false) MultipartFile image) {
         if (result.hasErrors()) {
             model.addAttribute("provider", provider);
             return "provider-create";
         }
         providerService.save(provider, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new provider " + provider.getId())
+                        .build()
+        );
         return "redirect:/providers";
     }
 
@@ -92,19 +105,40 @@ public class ProviderController {
         providerDto.setWebsite(provider.getWebsite());
         providerDto.setEmail(provider.getEmail());
         providerService.update(providerDto, image);
+
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " updated a provider " + id)
+                        .build()
+        );
         return "redirect:/providers";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteProvider(@PathVariable(value = "id") int id) {
         providerService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a provider " + id)
+                        .build()
+        );
         return "redirect:/providers";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionProvider(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> providerService.delete(Integer.parseInt(id)));
+            Arrays.stream(selectedIds).forEach(id -> {
+                providerService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a provider " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/providers";
     }

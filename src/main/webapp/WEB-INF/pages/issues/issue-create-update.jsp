@@ -26,34 +26,36 @@
 
         <form:form method="POST" modelAttribute="issue" action="${action}" role="form"
                    enctype="multipart/form-data">
+            <label class="form-label" for="title"><spring:message code="issue.title"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="title"><spring:message code="issue.title"/></label>
                 <form:input path="title" id="title" class="form-control"/>
                 <form:errors path="title" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="description"><spring:message
+                    code="issue.description"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="description"><spring:message
-                        code="issue.description"/></label>
                 <form:input path="description" id="description" class="form-control"/>
                 <form:errors path="description" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="occurredAt"><spring:message
+                    code="issue.occurredAt"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="occurredAt"><spring:message
-                        code="issue.occurredAt"/></label>
                 <form:input path="occurredAt" id="occurredAt" class="form-control" type="date"/>
                 <form:errors path="occurredAt" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="note"><spring:message code="note"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="note"><spring:message code="note"/></label>
                 <form:input path="note" id="note" class="form-control"/>
                 <form:errors path="note" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="device"><spring:message code="device"/></label>
             <div class="input-group input-group-outline mb-3">
                 <input value="${issue.device.id} - ${issue.device.deviceCategory.name}" class="form-control"
-                       disabled type="text"/>
+                       disabled type="text" id="device"/>
                 <form:hidden path="device.id"/>
             </div>
             <form:hidden path="user.id" value="${currentUser.id}"/>
+            <label class="form-label" for="severity"><spring:message code="issue.severity"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="severity" id="severity" class="form-control">
                     <form:option value="">
@@ -63,8 +65,8 @@
                 </form:select>
                 <form:errors path="severity" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="image"><spring:message code="issue.image"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="image"><spring:message code="issue.image"/></label>
                 <input type="file" name="img" id="image" class="form-control" accept="image/*"/>
                 <form:errors path="image" cssClass="text-danger"/>
             </div>

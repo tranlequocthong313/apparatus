@@ -25,54 +25,56 @@
 
         <form:form method="POST" modelAttribute="device" action="${action}" role="form"
                    enctype="multipart/form-data">
+            <label class="form-label" for="id"><spring:message code="device.id"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="id"><spring:message code="device.id"/></label>
                 <form:input path="id" id="id" class="form-control"/>
                 <form:errors path="id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="serial"><spring:message code="device.serial"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="serial"><spring:message code="device.serial"/></label>
                 <form:input path="serial" id="serial" class="form-control"/>
                 <form:errors path="serial" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="dateStartedOperation"><spring:message
+                    code="device.dateStartedOperation"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="dateStartedOperation"><spring:message
-                        code="device.dateStartedOperation"/></label>
                 <form:input path="dateStartedOperation" id="dateStartedOperation" class="form-control" type="date"/>
                 <form:errors path="dateStartedOperation" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="dateOfManufacture"><spring:message
+                    code="device.dateOfManufacture"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="dateOfManufacture"><spring:message
-                        code="device.dateOfManufacture"/></label>
                 <form:input path="dateOfManufacture" id="dateOfManufacture" class="form-control" type="date"/>
                 <form:errors path="dateOfManufacture" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="price"><spring:message code="device.price"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="price"><spring:message code="device.price"/></label>
                 <form:input path="price" id="price" class="form-control" type="number"/>
                 <form:errors path="price" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="dateOfPurchase"><spring:message code="device.dateOfPurchase"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="dateOfPurchase"><spring:message code="device.dateOfPurchase"/></label>
                 <form:input path="dateOfPurchase" id="dateOfPurchase" class="form-control" type="date"/>
                 <form:errors path="dateOfPurchase" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="warrantyPeriod"><spring:message code="device.warrantyPeriod"/> (<spring:message code="month" />)</label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="warrantyPeriod"><spring:message code="device.warrantyPeriod"/></label>
                 <form:input path="warrantyPeriod" id="warrantyPeriod" class="form-control" type="number"/>
                 <form:errors path="warrantyPeriod" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="link"><spring:message code="device.link"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="link"><spring:message code="device.link"/></label>
                 <form:input path="link" id="link" class="form-control"/>
                 <form:errors path="link" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="yearOfDepreciation"><spring:message
+                    code="device.yearOfDepreciation"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="yearOfDepreciation"><spring:message
-                        code="device.yearOfDepreciation"/></label>
                 <form:input path="yearOfDepreciation" id="yearOfDepreciation" class="form-control" type="number"/>
                 <form:errors path="yearOfDepreciation" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="deviceCategory"><spring:message
+                    code="device.deviceCategory"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="deviceCategory.id" id="deviceCategory" class="form-control">
                     <form:option value="">
@@ -82,6 +84,8 @@
                 </form:select>
                 <form:errors path="deviceCategory.id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="location"><spring:message
+                    code="device.location"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="location.id" id="location" class="form-control">
                     <form:option value="">
@@ -91,6 +95,8 @@
                 </form:select>
                 <form:errors path="location.id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="locationDetail"><spring:message
+                    code="device.location.detail"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="locationDetail.id" id="locationDetail" class="form-control">
                     <form:option value="">
@@ -100,6 +106,8 @@
                 </form:select>
                 <form:errors path="locationDetail.id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="provider"><spring:message
+                    code="device.provider"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="provider.id" id="provider" class="form-control">
                     <form:option value="">
@@ -109,6 +117,8 @@
                 </form:select>
                 <form:errors path="provider.id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="user"><spring:message
+                    code="device.manager"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="user.id" id="user" class="form-control">
                     <form:option value="">
@@ -118,6 +128,8 @@
                 </form:select>
                 <form:errors path="user.id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="status"><spring:message
+                    code="device.status"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="status" id="status" class="form-control">
                     <form:option value="">
@@ -127,8 +139,8 @@
                 </form:select>
                 <form:errors path="status" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="image"><spring:message code="device.image"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="image"><spring:message code="device.image"/></label>
                 <input type="file" name="img" id="image" class="form-control" accept="image/*"/>
                 <form:errors path="image" cssClass="text-danger"/>
             </div>

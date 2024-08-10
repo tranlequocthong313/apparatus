@@ -4,8 +4,11 @@
  */
 package com.tranlequocthong313.controllers;
 
+import com.tranlequocthong313.models.ActivityLog;
+import com.tranlequocthong313.services.ActivityLogService;
 import com.tranlequocthong313.services.LocationHistoryService;
 import com.tranlequocthong313.services.LocationService;
+import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +30,11 @@ public class LocationHistoryController {
     @Autowired
     private LocationService locationService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private Utils utils;
+    @Autowired
+    private ActivityLogService activityLogService;
 
     @GetMapping
     public String getLocationHistorys(@RequestParam Map<String, String> queryParams, Model model) {
@@ -47,13 +54,27 @@ public class LocationHistoryController {
     @GetMapping("/{id}/delete")
     public String deleteLocationHistory(@PathVariable(value = "id") int id) {
         locationHistoryService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a location history " + id)
+                        .build()
+        );
         return "redirect:/location-histories";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionLocationHistory(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> locationHistoryService.delete(Integer.parseInt(id)));
+            Arrays.stream(selectedIds).forEach(id -> {
+                locationHistoryService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a location history " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/location-histories";
     }

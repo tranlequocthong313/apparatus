@@ -11,7 +11,6 @@ import com.tranlequocthong313.dto.UserDto;
 import com.tranlequocthong313.exceptions.UnauthorizedException;
 import com.tranlequocthong313.models.User;
 import com.tranlequocthong313.repositories.UserRepository;
-import com.tranlequocthong313.repositories.impl.UserRepositoryImpl;
 import com.tranlequocthong313.services.UserService;
 
 import java.io.IOException;
@@ -154,12 +153,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findByRoles(User.UserRole[] userRoles) {
-        Map<String, String> queryParams = new HashMap<>();
-        List<String> roles = new ArrayList<>();
-        for (User.UserRole role : userRoles) {
-            roles.add(role.name());
-        }
-        return userRepositoryImpl.findByRoles(new String[]{Arrays.toString(roles.toArray())});
+        return userRepositoryImpl.findByRoles(userRoles);
     }
 
 }

@@ -7,6 +7,7 @@ package com.tranlequocthong313.controllers;
 import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
 import com.tranlequocthong313.dto.RepairDto;
+import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.Repair;
 import com.tranlequocthong313.services.*;
@@ -41,6 +42,8 @@ public class RepairController {
     private Utils utils;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ActivityLogService activityLogService;
 
     @GetMapping
     public String getRepairs(@RequestParam Map<String, String> queryParams, Model model) {
@@ -104,12 +107,19 @@ public class RepairController {
             issue.setCost(repair.getCost());
             issue.setResolvedAt(repair.getCompletedDate());
             issue.setDone(true);
+            issueService.update(issue);
             device = deviceService.findById(issue.getDevice().getId());
         } else {
             device = deviceService.findById(repair.getDevice().getId());
         }
         device.setStatus(Device.Status.OPERATING);
         deviceService.update(device);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new repair " + repair.getId())
+                        .build()
+        );
         return "redirect:/repairs";
     }
 
@@ -140,19 +150,39 @@ public class RepairController {
         repairDto.setCost(repair.getCost());
         repairDto.setRepairedBy(repair.getRepairedBy());
         repairService.update(repairDto, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " updated a repair " + repair.getId())
+                        .build()
+        );
         return "redirect:/repairs";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteRepair(@PathVariable(value = "id") int id) {
         repairService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a repair " + id)
+                        .build()
+        );
         return "redirect:/repairs";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionRepair(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> repairService.delete(Integer.parseInt(id)));
+            Arrays.stream(selectedIds).forEach(id -> {
+                repairService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a repair " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/repairs";
     }

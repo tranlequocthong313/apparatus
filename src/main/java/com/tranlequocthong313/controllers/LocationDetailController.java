@@ -5,9 +5,12 @@
 package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.LocationDetailDto;
+import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.LocationDetail;
+import com.tranlequocthong313.services.ActivityLogService;
 import com.tranlequocthong313.services.LocationDetailService;
 import com.tranlequocthong313.services.LocationService;
+import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +35,11 @@ public class LocationDetailController {
     @Autowired
     private LocationService locationService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private Utils utils;
+    @Autowired
+    private ActivityLogService activityLogService;
 
     @GetMapping
     public String getLocationDetails(@RequestParam Map<String, String> queryParams, Model model) {
@@ -73,6 +80,13 @@ public class LocationDetailController {
             return "location-detail-create";
         }
         locationDetailService.save(locationDetail, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new location detail " + locationDetail.getId())
+                        .build()
+        );
+
         return "redirect:/location-details";
     }
 
@@ -100,19 +114,39 @@ public class LocationDetailController {
         locationDetailDto.setLocation(locationDetail.getLocation());
         locationDetailDto.setNote(locationDetail.getNote());
         locationDetailService.update(locationDetailDto, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " updated a location detail " + locationDetail.getId())
+                        .build()
+        );
         return "redirect:/location-details";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteLocationDetail(@PathVariable(value = "id") int id) {
         locationDetailService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a location detail " + id)
+                        .build()
+        );
         return "redirect:/location-details";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionLocationDetail(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> locationDetailService.delete(Integer.parseInt(id)));
+            Arrays.stream(selectedIds).forEach(id -> {
+                locationDetailService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a location detail " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/location-details";
     }

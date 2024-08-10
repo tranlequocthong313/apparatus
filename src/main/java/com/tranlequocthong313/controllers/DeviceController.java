@@ -5,10 +5,7 @@
 package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.DeviceDto;
-import com.tranlequocthong313.models.Device;
-import com.tranlequocthong313.models.LocationHistory;
-import com.tranlequocthong313.models.Repair;
-import com.tranlequocthong313.models.User;
+import com.tranlequocthong313.models.*;
 import com.tranlequocthong313.services.*;
 import com.tranlequocthong313.services.DeviceService;
 import com.tranlequocthong313.utils.Utils;
@@ -22,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -55,6 +51,8 @@ public class DeviceController {
     private RepairService repairService;
     @Autowired
     private LocationHistoryService locationHistoryService;
+    @Autowired
+    private ActivityLogService activityLogService;
     @Autowired
     private Utils utils;
 
@@ -96,7 +94,7 @@ public class DeviceController {
         model.addAttribute("locationDetails", locationDetailService.findAll());
         model.addAttribute("providers", providerService.findAll());
         model.addAttribute("users", userService.findByRole(User.UserRole.ROLE_ADMIN));
-        model.addAttribute("statuses", Device.Status.values());
+        model.addAttribute("statuses", utils.getNames(Device.Status.class));
         model.addAttribute("device", new Device());
         return "device-create";
     }
@@ -113,11 +111,17 @@ public class DeviceController {
             model.addAttribute("locationDetails", locationDetailService.findAll());
             model.addAttribute("providers", providerService.findAll());
             model.addAttribute("users", userService.findByRole(User.UserRole.ROLE_ADMIN));
-            model.addAttribute("statuses", Device.Status.values());
+            model.addAttribute("statuses", utils.getNames(Device.Status.class));
             model.addAttribute("device", device);
             return "device-create";
         }
         deviceService.save(device, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new device " + device.getId())
+                        .build()
+        );
         return "redirect:/devices";
     }
 
@@ -128,7 +132,7 @@ public class DeviceController {
         model.addAttribute("locationDetails", locationDetailService.findAll());
         model.addAttribute("providers", providerService.findAll());
         model.addAttribute("users", userService.findByRole(User.UserRole.ROLE_ADMIN));
-        model.addAttribute("statuses", Device.Status.values());
+        model.addAttribute("statuses", utils.getNames(Device.Status.class));
         model.addAttribute("device", deviceService.findById(id));
         return "device-update";
     }
@@ -145,7 +149,7 @@ public class DeviceController {
             model.addAttribute("locationDetails", locationDetailService.findAll());
             model.addAttribute("providers", providerService.findAll());
             model.addAttribute("users", userService.findByRole(User.UserRole.ROLE_ADMIN));
-            model.addAttribute("statuses", Device.Status.values());
+            model.addAttribute("statuses", utils.getNames(Device.Status.class));
             model.addAttribute("device", device);
             return "device-update";
         }
@@ -174,19 +178,39 @@ public class DeviceController {
                 .device(device)
                 .build()
         );
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " update a device " + device.getId())
+                        .build()
+        );
         return "redirect:/devices";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteDevice(@PathVariable(value = "id") String id) {
         deviceService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a device " + id)
+                        .build()
+        );
         return "redirect:/devices";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionDevice(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> deviceService.delete(id));
+            Arrays.stream(selectedIds).forEach(id -> {
+                deviceService.delete(id);
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a device " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/devices";
     }

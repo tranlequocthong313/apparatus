@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : index
     Created on : Jul 31, 2024, 5:44:58?PM
     Author     : tranlequocthong313
@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-header p-3 pt-2">
                 <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                    <i class="material-icons opacity-10">devices</i>
+                    <i class="material-icons opacity-10">storage</i>
                 </div>
                 <div class="text-end pt-1">
                     <p class="text-sm mb-0 text-capitalize">
@@ -30,7 +30,7 @@
         <div class="card">
             <div class="card-header p-3 pt-2">
                 <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-                    <i class="material-icons opacity-10">report_problem</i>
+                    <i class="material-icons opacity-10">bug_report</i>
                 </div>
                 <div class="text-end pt-1">
                     <p class="text-sm mb-0 text-capitalize">
@@ -87,12 +87,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <h6 class="mb-0 ">Website Views</h6>
-                <p class="text-sm ">Last Campaign Performance</p>
+                <h6 class="mb-0 "><spring:message code="issue"/></h6>
+                <p class="text-sm "><spring:message code="dashboard.totalIssues.per.month"/></p>
                 <hr class="dark horizontal">
                 <div class="d-flex ">
-                    <i class="material-icons text-sm my-auto me-1">schedule</i>
-                    <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
                 </div>
             </div>
         </div>
@@ -107,12 +105,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <h6 class="mb-0 "> Daily Sales </h6>
-                <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
+                <h6 class="mb-0 "><spring:message code="repair"/></h6>
+                <p class="text-sm "><spring:message code="dashboard.totalRepairCost.per.month"/></p>
                 <hr class="dark horizontal">
                 <div class="d-flex ">
-                    <i class="material-icons text-sm my-auto me-1">schedule</i>
-                    <p class="mb-0 text-sm"> updated 4 min ago </p>
                 </div>
             </div>
         </div>
@@ -127,12 +123,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <h6 class="mb-0 ">Completed Tasks</h6>
-                <p class="text-sm ">Last Campaign Performance</p>
+                <h6 class="mb-0 "><spring:message code="device.status"/></h6>
+                <p class="text-sm "><spring:message code="dashboard.statuses"/></p>
                 <hr class="dark horizontal">
                 <div class="d-flex ">
-                    <i class="material-icons text-sm my-auto me-1">schedule</i>
-                    <p class="mb-0 text-sm">just updated</p>
                 </div>
             </div>
         </div>
@@ -453,68 +447,25 @@
     <div class="col-lg-4 col-md-6">
         <div class="card h-100">
             <div class="card-header pb-0">
-                <h6>Orders overview</h6>
+                <h6><spring:message code="dashboard.activity.log"/></h6>
                 <p class="text-sm">
                     <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-                    <span class="font-weight-bold">24%</span> this month
+                    <span class="font-weight-bold"><spring:message code="dashboard.admin.activity"/></span>
                 </p>
             </div>
             <div class="card-body p-3">
                 <div class="timeline timeline-one-side">
-                    <div class="timeline-block mb-3">
-			<span class="timeline-step">
-			    <i class="material-icons text-success text-gradient">notifications</i>
-			</span>
-                        <div class="timeline-content">
-                            <h6 class="text-dark text-sm font-weight-bold mb-0">$2400, Design changes</h6>
-                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 7:20 PM</p>
+                    <c:forEach items="${activityLogs}" var="log">
+                        <div class="timeline-block mb-3">
+                        <span class="timeline-step">
+                            <img src="${log.user.avatar}" alt="profile_image" class="w-80 border-radius-sm shadow-sm">
+                        </span>
+                            <div class="timeline-content">
+                                <h6 class="text-dark text-sm font-weight-bold mb-0">${log.log}</h6>
+                                <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">${log.createdAt}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="timeline-block mb-3">
-			<span class="timeline-step">
-			    <i class="material-icons text-danger text-gradient">code</i>
-			</span>
-                        <div class="timeline-content">
-                            <h6 class="text-dark text-sm font-weight-bold mb-0">New order #1832412</h6>
-                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 DEC 11 PM</p>
-                        </div>
-                    </div>
-                    <div class="timeline-block mb-3">
-			<span class="timeline-step">
-			    <i class="material-icons text-info text-gradient">shopping_cart</i>
-			</span>
-                        <div class="timeline-content">
-                            <h6 class="text-dark text-sm font-weight-bold mb-0">Server payments for April</h6>
-                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 DEC 9:34 PM</p>
-                        </div>
-                    </div>
-                    <div class="timeline-block mb-3">
-			<span class="timeline-step">
-			    <i class="material-icons text-warning text-gradient">credit_card</i>
-			</span>
-                        <div class="timeline-content">
-                            <h6 class="text-dark text-sm font-weight-bold mb-0">New card added for order #4395133</h6>
-                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">20 DEC 2:20 AM</p>
-                        </div>
-                    </div>
-                    <div class="timeline-block mb-3">
-			<span class="timeline-step">
-			    <i class="material-icons text-primary text-gradient">key</i>
-			</span>
-                        <div class="timeline-content">
-                            <h6 class="text-dark text-sm font-weight-bold mb-0">Unlock packages for development</h6>
-                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">18 DEC 4:54 AM</p>
-                        </div>
-                    </div>
-                    <div class="timeline-block">
-			<span class="timeline-step">
-			    <i class="material-icons text-dark text-gradient">payments</i>
-			</span>
-                        <div class="timeline-content">
-                            <h6 class="text-dark text-sm font-weight-bold mb-0">New order #9583120</h6>
-                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">17 DEC</p>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
         </div>
@@ -523,20 +474,37 @@
 
 <script src="./assets/js/plugins/chartjs.min.js"></script>
 <script>
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    var statuses = ["OPERATING", "ERROR", "MAINTENANCE", "SOLD"]
+    var issueData = new Array(months.length).fill(0);
+    var costData = new Array(months.length).fill(0);
+    var statusData = new Array(statuses.length).fill(0);
+
+    <c:forEach items="${issuePerMonth}" var="i">
+    issueData[${i[0]}-1] = ${i[1]};
+    </c:forEach>
+
+    <c:forEach items="${repairCostPerMonth}" var="r">
+    costData[${r[0]}-1] = ${r[1]};
+    </c:forEach>
+
+    <c:forEach items="${deviceStatuses}" var="s">
+    statusData[statuses.indexOf('${s[0]}')] = ${s[1]};
+    </c:forEach>
     var ctx = document.getElementById("chart-bars").getContext("2d");
 
     new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["M", "T", "W", "T", "F", "S", "S"],
+            labels: months,
             datasets: [{
-                label: "Sales",
+                label: "Issues",
                 tension: 0.4,
                 borderWidth: 0,
                 borderRadius: 4,
                 borderSkipped: false,
                 backgroundColor: "rgba(255, 255, 255, .8)",
-                data: [50, 20, 10, 22, 50, 10, 40],
+                data: issueData,
                 maxBarThickness: 6
             },],
         },
@@ -603,15 +571,14 @@
         },
     });
 
-
     var ctx2 = document.getElementById("chart-line").getContext("2d");
 
     new Chart(ctx2, {
         type: "line",
         data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: months,
             datasets: [{
-                label: "Mobile apps",
+                label: "Repair Cost",
                 tension: 0,
                 borderWidth: 0,
                 pointRadius: 5,
@@ -622,7 +589,7 @@
                 borderWidth: 4,
                 backgroundColor: "transparent",
                 fill: true,
-                data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+                data: costData,
                 maxBarThickness: 6
 
             }],
@@ -692,9 +659,9 @@
     new Chart(ctx3, {
         type: "line",
         data: {
-            labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: statuses,
             datasets: [{
-                label: "Mobile apps",
+                label: "Device Status",
                 tension: 0,
                 borderWidth: 0,
                 pointRadius: 5,
@@ -704,7 +671,7 @@
                 borderWidth: 4,
                 backgroundColor: "transparent",
                 fill: true,
-                data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                data: statusData,
                 maxBarThickness: 6
 
             }],
@@ -768,7 +735,4 @@
             },
         },
     });
-
 </script>
-
-
