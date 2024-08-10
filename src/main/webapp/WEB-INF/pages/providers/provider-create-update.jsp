@@ -25,28 +25,28 @@
 
         <form:form method="POST" modelAttribute="provider" action="${action}" role="form"
                    enctype="multipart/form-data">
+            <label class="form-label" for="name"><spring:message code="name"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="name"><spring:message code="name"/></label>
                 <form:input path="name" id="name" class="form-control"/>
                 <form:errors path="name" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="phoneNumber"><spring:message code="phone.number"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="phoneNumber"><spring:message code="phone.number"/></label>
                 <form:input path="phoneNumber" id="phoneNumber" class="form-control"/>
                 <form:errors path="phoneNumber" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="email"><spring:message code="email"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="email"><spring:message code="email"/></label>
                 <form:input path="email" id="email" class="form-control"/>
                 <form:errors path="email" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="website"><spring:message code="website"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="website"><spring:message code="website"/></label>
                 <form:input path="website" id="website" class="form-control"/>
                 <form:errors path="website" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="address"><spring:message code="address"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="address"><spring:message code="address"/></label>
                 <form:input path="address" id="address" class="form-control"/>
                 <form:errors path="address" cssClass="text-danger"/>
             </div>

@@ -25,26 +25,27 @@
 
         <form:form method="POST" modelAttribute="deviceCategory" action="${action}" role="form"
                    enctype="multipart/form-data">
+            <label class="form-label" for="name"><spring:message code="name"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="name"><spring:message code="name"/></label>
                 <form:input path="name" id="name" class="form-control"/>
                 <form:errors path="name" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="model"><spring:message code="model"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="model"><spring:message code="model"/></label>
                 <form:input path="model" id="model" class="form-control"/>
                 <form:errors path="model" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="producer"><spring:message code="producer"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="producer"><spring:message code="producer"/></label>
                 <form:input path="producer" id="producer" class="form-control"/>
                 <form:errors path="producer" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="origin"><spring:message code="origin"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="origin"><spring:message code="origin"/></label>
                 <form:input path="origin" id="origin" class="form-control"/>
                 <form:errors path="origin" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="deviceType"><spring:message code="device.deviceType"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="deviceType.id" id="deviceType" class="form-control">
                     <form:option value="">
@@ -54,6 +55,7 @@
                 </form:select>
                 <form:errors path="deviceType.id" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="image"><spring:message code="device.image"/></label>
             <div class="input-group input-group-outline mb-3">
                 <input type="file" name="img" id="image" class="form-control" accept="image/*"/>
                 <form:errors path="image" cssClass="text-danger"/>

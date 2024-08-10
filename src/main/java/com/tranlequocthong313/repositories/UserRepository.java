@@ -16,5 +16,5 @@ import java.util.Map;
 public interface UserRepository extends BaseRepository<User, Integer> {
 
 	User getUserByUsername(String username);
-	List<User> findByRoles(String[] roles);
+	List<User> findByRoles(User.UserRole[] roles);
 }

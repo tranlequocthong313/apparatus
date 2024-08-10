@@ -5,9 +5,12 @@
 package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.DeviceCategoryDto;
+import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.DeviceCategory;
+import com.tranlequocthong313.services.ActivityLogService;
 import com.tranlequocthong313.services.DeviceCategoryService;
 import com.tranlequocthong313.services.DeviceTypeService;
+import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +36,10 @@ public class DeviceCategoryController {
     private DeviceTypeService deviceTypeService;
     @Autowired
     private Utils utils;
+    @Autowired
+    private ActivityLogService activityLogService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public String getDeviceCategories(@RequestParam Map<String, String> queryParams, Model model) {
@@ -73,6 +80,12 @@ public class DeviceCategoryController {
             return "device-category-create";
         }
         deviceCategoryService.save(deviceCategory, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new device category " + deviceCategory.getId())
+                        .build()
+        );
         return "redirect:/device-categories";
     }
 
@@ -101,19 +114,39 @@ public class DeviceCategoryController {
         deviceCategoryDto.setOrigin(deviceCategory.getOrigin());
         deviceCategoryDto.setProducer(deviceCategory.getProducer());
         deviceCategoryService.update(deviceCategoryDto, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " updated a device category " + deviceCategory.getId())
+                        .build()
+        );
         return "redirect:/device-categories";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteDeviceCategory(@PathVariable(value = "id") int id) {
         deviceCategoryService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted a device category " + id)
+                        .build()
+        );
         return "redirect:/device-categories";
     }
 
     @PostMapping("/bulk-action")
     public String bulkActionDeviceCategory(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
         if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> deviceCategoryService.delete(Integer.parseInt(id)));
+            Arrays.stream(selectedIds).forEach(id -> {
+                deviceCategoryService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted a device category " + id)
+                                .build()
+                );
+            });
         }
         return "redirect:/device-categories";
     }

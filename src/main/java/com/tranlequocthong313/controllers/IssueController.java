@@ -6,8 +6,10 @@ package com.tranlequocthong313.controllers;
 
 import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
+import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.Issue;
+import com.tranlequocthong313.services.ActivityLogService;
 import com.tranlequocthong313.services.DeviceService;
 import com.tranlequocthong313.services.IssueService;
 import com.tranlequocthong313.services.UserService;
@@ -41,6 +43,8 @@ public class IssueController {
     private Utils utils;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ActivityLogService activityLogService;
 
     @GetMapping
     public String getIssues(@RequestParam Map<String, String> queryParams, Model model) {
@@ -86,6 +90,12 @@ public class IssueController {
         DeviceDto deviceDto = deviceService.findById(issue.getDevice().getId());
         deviceDto.setStatus(Device.Status.ERROR);
         deviceService.update(deviceDto);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " created a new issue " + issue.getId())
+                        .build()
+        );
         return "redirect:/issues";
     }
 
@@ -94,39 +104,6 @@ public class IssueController {
         model.addAttribute("severities", utils.getNames(Issue.Severity.class));
         model.addAttribute("issue", issueService.findById(issueId));
         return "issue-update";
-    }
-
-    @GetMapping("/{id}/delete")
-    public String deleteIssue(@PathVariable(value = "id") int id) {
-        issueService.delete(id);
-        return "redirect:/issues";
-    }
-
-    @PostMapping("/bulk-action")
-    public String bulkActionIssue(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
-        if (action.equals("delete")) {
-            Arrays.stream(selectedIds).forEach(id -> issueService.delete(Integer.parseInt(id)));
-        }
-        return "redirect:/issues";
-    }
-
-    @GetMapping("/{id}/resolve")
-    public String createResolveIssueForm(Model model, @PathVariable(value = "id") int id) {
-        model.addAttribute("issue", issueService.findById(id));
-        return "issue-resolve";
-    }
-
-    @PostMapping(path = "/{id}/resolve")
-    public String resolveIssue(
-            @RequestParam Map<String, String> issue,
-            @PathVariable(value = "id") int id) {
-        IssueDto issueDto = issueService.findById(id);
-        issueDto.setCost(Long.parseLong(issue.get("cost")));
-        issueDto.setDone(true);
-        issueDto.setNote(issue.get("note"));
-        issueDto.setResolvedAt(Date.valueOf(issue.get("resolvedAt")));
-        issueService.update(issueDto);
-        return "redirect:/issues";
     }
 
     @PostMapping(path = "/{id}/update")
@@ -149,6 +126,40 @@ public class IssueController {
         issueDto.setDone(issue.getDone());
         issueDto.setNote(issue.getNote());
         issueService.update(issueDto, image);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " update an issue " + id)
+                        .build()
+        );
+        return "redirect:/issues";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteIssue(@PathVariable(value = "id") int id) {
+        issueService.delete(id);
+        activityLogService.save(
+                ActivityLog.builder()
+                        .user(userService.getCurrentUser())
+                        .log(userService.getCurrentUser().getFullName() + " deleted an issue " + id)
+                        .build()
+        );
+        return "redirect:/issues";
+    }
+
+    @PostMapping("/bulk-action")
+    public String bulkActionIssue(@RequestParam(value = "action") String action, @RequestParam(value = "selectedIds") String[] selectedIds) {
+        if (action.equals("delete")) {
+            Arrays.stream(selectedIds).forEach(id -> {
+                issueService.delete(Integer.parseInt(id));
+                activityLogService.save(
+                        ActivityLog.builder()
+                                .user(userService.getCurrentUser())
+                                .log(userService.getCurrentUser().getFullName() + " deleted an issue " + id)
+                                .build()
+                );
+            });
+        }
         return "redirect:/issues";
     }
 }

@@ -5,10 +5,7 @@ import com.tranlequocthong313.dto.CategoryDto;
 import java.security.Principal;
 import java.util.Arrays;
 
-import com.tranlequocthong313.services.DeviceService;
-import com.tranlequocthong313.services.IssueService;
-import com.tranlequocthong313.services.RepairService;
-import com.tranlequocthong313.services.UserService;
+import com.tranlequocthong313.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +36,10 @@ public class IndexController {
     private IssueService issueService;
     @Autowired
     private RepairService repairService;
+    @Autowired
+    private StatsService statsService;
+    @Autowired
+    private ActivityLogService activityLogService;
 
     @ModelAttribute
     public void commAttrs(Model model, HttpServletRequest request, Principal principal) {
@@ -67,6 +68,13 @@ public class IndexController {
         model.addAttribute("totalIssues", issueService.findByDone(false).size());
         model.addAttribute("totalRepairCost", repairService.totalCost());
         model.addAttribute("totalUsers", userService.count());
+
+        model.addAttribute("issuePerMonth", statsService.issuePerPeriod());
+        model.addAttribute("repairCostPerMonth", statsService.repairCostsPerPeriod());
+        model.addAttribute("deviceStatuses", statsService.deviceStatuses());
+
+        model.addAttribute("activityLogs", activityLogService.findAll());
+
         return "index";
     }
 }

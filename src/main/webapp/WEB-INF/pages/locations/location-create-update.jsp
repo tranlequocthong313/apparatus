@@ -25,18 +25,18 @@
 
         <form:form method="POST" modelAttribute="location" action="${action}" role="form"
                    enctype="multipart/form-data">
+            <label class="form-label" for="address"><spring:message code="address"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="address"><spring:message code="address"/></label>
                 <form:input path="address" id="address" class="form-control"/>
                 <form:errors path="address" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="building"><spring:message code="building"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="building"><spring:message code="building"/></label>
                 <form:input path="building" id="building" class="form-control"/>
                 <form:errors path="building" cssClass="text-danger"/>
             </div>
+            <label class="form-label" for="note"><spring:message code="note"/></label>
             <div class="input-group input-group-outline mb-3">
-                <label class="form-label" for="note"><spring:message code="note"/></label>
                 <form:input path="note" id="note" class="form-control"/>
                 <form:errors path="note" cssClass="text-danger"/>
             </div>
