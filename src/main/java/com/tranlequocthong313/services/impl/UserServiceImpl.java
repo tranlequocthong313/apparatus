@@ -35,125 +35,126 @@ import org.springframework.web.multipart.MultipartFile;
 @Service("userDetailService")
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private Cloudinary cloudinary;
+	@Autowired
+	private Cloudinary cloudinary;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtProvider jwtProvider;
-    @Autowired
-    private UserRepository userRepositoryImpl;
+	@Autowired
+	private JwtProvider jwtProvider;
+
+	@Autowired
+	private UserRepository userRepositoryImpl;
 
 
-    @Override
-    public List<UserDto> findAll(Map<String, String> queryParams) {
-        return userRepository.findAll(queryParams).stream().map(user -> mapToUserDto(user)).collect(Collectors.toList());
-    }
+	@Override
+	public List<UserDto> findAll(Map<String, String> queryParams) {
+		return userRepository.findAll(queryParams).stream().map(user -> mapToUserDto(user)).collect(Collectors.toList());
+	}
 
-    private UserDto mapToUserDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .fullName(user.getFullName())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .username(user.getUsername())
-                .active(user.getActive())
-                .avatar(user.getAvatar())
-                .userRole(user.getUserRole())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .note(user.getNote())
-                .build();
-    }
+	private UserDto mapToUserDto(User user) {
+		return UserDto.builder()
+			.id(user.getId())
+			.fullName(user.getFullName())
+			.email(user.getEmail())
+			.phoneNumber(user.getPhoneNumber())
+			.username(user.getUsername())
+			.active(user.getActive())
+			.avatar(user.getAvatar())
+			.userRole(user.getUserRole())
+			.createdAt(user.getCreatedAt())
+			.updatedAt(user.getUpdatedAt())
+			.note(user.getNote())
+			.build();
+	}
 
-    @Override
-    public User findById(Integer id) {
-        return userRepository.getReferenceById(id);
-    }
+	@Override
+	public User findById(Integer id) {
+		return userRepository.getReferenceById(id);
+	}
 
-    @Override
-    public void delete(int id) {
-        userRepository.delete(id);
-    }
+	@Override
+	public void delete(int id) {
+		userRepository.delete(id);
+	}
 
-    @Override
-    public void save(User user, MultipartFile avatar) {
-        if (avatar != null && !avatar.isEmpty()) {
-            try {
-                Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                user.setAvatar(res.get("secure_url").toString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
+	@Override
+	public void save(User user, MultipartFile avatar) {
+		if (avatar != null && !avatar.isEmpty()) {
+			try {
+				Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+				user.setAvatar(res.get("secure_url").toString());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		userRepository.save(user);
+	}
 
-    @Override
-    public User getUserByUsername(String username) {
-        return userRepository.getUserByUsername(username);
-    }
+	@Override
+	public User getUserByUsername(String username) {
+		return userRepository.getUserByUsername(username);
+	}
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = getUserByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
-    }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = getUserByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException(username);
+		}
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+	}
 
-    @Override
-    public UserDto login(String username, String password) {
-        User user = userRepository.getUserByUsername(username);
-        if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            String token = this.jwtProvider.generateToken(user.getUsername());
-            UserDto userDto = mapToUserDto(user);
-            userDto.setToken(token);
-            return userDto;
-        }
-        return null;
-    }
+	@Override
+	public UserDto login(String username, String password) {
+		User user = userRepository.getUserByUsername(username);
+		if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
+			String token = this.jwtProvider.generateToken(user.getUsername());
+			UserDto userDto = mapToUserDto(user);
+			userDto.setToken(token);
+			return userDto;
+		}
+		return null;
+	}
 
-    @Override
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = null;
+	@Override
+	public User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = null;
 
-        if (authentication != null) {
-            if (authentication.getPrincipal() instanceof UserDetails) {
-                username = ((UserDetails) authentication.getPrincipal()).getUsername();
-            } else {
-                username = authentication.getName();
-            }
-        }
+		if (authentication != null) {
+			if (authentication.getPrincipal() instanceof UserDetails) {
+				username = ((UserDetails) authentication.getPrincipal()).getUsername();
+			} else {
+				username = authentication.getName();
+			}
+		}
 
-        if (username != null) {
-            return userRepository.getUserByUsername(username);
-        } else {
-            throw new UnauthorizedException("No authenticated user found");
-        }
-    }
+		if (username != null) {
+			return userRepository.getUserByUsername(username);
+		} else {
+			throw new UnauthorizedException("No authenticated user found");
+		}
+	}
 
-    @Override
-    public Object count() {
-        return userRepository.count();
-    }
+	@Override
+	public List<User> findByRoles(User.UserRole[] userRoles) {
+		return userRepositoryImpl.findByRoles(userRoles);
+	}
 
-    @Override
-    public List<User> findByRoles(User.UserRole[] userRoles) {
-        return userRepositoryImpl.findByRoles(userRoles);
-    }
+	@Override
+	public Long count(Map<String, String> queryParams) {
+		return userRepository.count(queryParams);
+	}
 
 }

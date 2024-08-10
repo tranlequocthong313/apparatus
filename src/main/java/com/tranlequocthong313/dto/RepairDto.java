@@ -28,5 +28,4 @@ public class RepairDto {
     private Device device;
     private Issue issue;
     private User user;
-    private RepairCategory repairCategorySet;
 }

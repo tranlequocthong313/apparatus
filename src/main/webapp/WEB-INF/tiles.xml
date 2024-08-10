@@ -257,4 +257,12 @@
     </definition>
     <!--    END REPAIRS   -->
 
+	<!--    USERS    -->
+	<definition name="users" extends="baseLayout">
+		<put-attribute name="title" value="Users"/>
+		<put-attribute name="main"
+					   value="/WEB-INF/pages/users/users.jsp"/>
+	</definition>
+	<!--    END USERS   -->
+
 </tiles-definitions>
