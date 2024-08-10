@@ -4,10 +4,13 @@
  */
 package com.tranlequocthong313.controllers;
 
+import com.tranlequocthong313.dto.LocationDetailDto;
 import com.tranlequocthong313.dto.LocationDto;
 import com.tranlequocthong313.models.ActivityLog;
 import com.tranlequocthong313.models.Location;
+import com.tranlequocthong313.models.LocationDetail;
 import com.tranlequocthong313.services.ActivityLogService;
+import com.tranlequocthong313.services.LocationDetailService;
 import com.tranlequocthong313.services.LocationService;
 import com.tranlequocthong313.services.UserService;
 import com.tranlequocthong313.utils.Utils;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +41,8 @@ public class LocationController {
     private ActivityLogService activityLogService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LocationDetailService locationDetailService;
 
     @GetMapping
     public String getLocations(@RequestParam Map<String, String> queryParams, Model model) {
@@ -138,5 +144,11 @@ public class LocationController {
             });
         }
         return "redirect:/locations";
+    }
+
+    @GetMapping("/{locationId}/details")
+    @ResponseBody
+    public List<LocationDetailDto> getLocationDetails(@PathVariable String locationId) {
+        return locationDetailService.findAll(Map.of("location", locationId));
     }
 }

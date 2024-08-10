@@ -57,7 +57,8 @@
                 <form:input path="dateOfPurchase" id="dateOfPurchase" class="form-control" type="date"/>
                 <form:errors path="dateOfPurchase" cssClass="text-danger"/>
             </div>
-            <label class="form-label" for="warrantyPeriod"><spring:message code="device.warrantyPeriod"/> (<spring:message code="month" />)</label>
+            <label class="form-label" for="warrantyPeriod"><spring:message code="device.warrantyPeriod"/>
+                (<spring:message code="month"/>)</label>
             <div class="input-group input-group-outline mb-3">
                 <form:input path="warrantyPeriod" id="warrantyPeriod" class="form-control" type="number"/>
                 <form:errors path="warrantyPeriod" cssClass="text-danger"/>
@@ -84,8 +85,7 @@
                 </form:select>
                 <form:errors path="deviceCategory.id" cssClass="text-danger"/>
             </div>
-            <label class="form-label" for="location"><spring:message
-                    code="device.location"/></label>
+            <label class="form-label" for="location"><spring:message code="device.location"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="location.id" id="location" class="form-control">
                     <form:option value="">
@@ -95,14 +95,13 @@
                 </form:select>
                 <form:errors path="location.id" cssClass="text-danger"/>
             </div>
-            <label class="form-label" for="locationDetail"><spring:message
-                    code="device.location.detail"/></label>
+
+            <label class="form-label" for="locationDetail"><spring:message code="device.location.detail"/></label>
             <div class="input-group input-group-outline mb-3">
                 <form:select path="locationDetail.id" id="locationDetail" class="form-control">
                     <form:option value="">
                         <spring:message code='device.location.detail'/>
                     </form:option>
-                    <form:options items="${locationDetails}" itemValue="id" itemLabel="room"/>
                 </form:select>
                 <form:errors path="locationDetail.id" cssClass="text-danger"/>
             </div>
@@ -135,7 +134,7 @@
                     <form:option value="">
                         <spring:message code='device.status'/>
                     </form:option>
-                    <form:options items="${statuses}" />
+                    <form:options items="${statuses}"/>
                 </form:select>
                 <form:errors path="status" cssClass="text-danger"/>
             </div>
@@ -168,3 +167,28 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#location').change(function () {
+            var locationId = $(this).val();
+            if (locationId) {
+                $.ajax({
+                    url: '/locations/' + locationId + '/details',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#locationDetail').empty();
+                        $('#locationDetail').append('<option value=""><spring:message code="device.location.detail"/></option>');
+                        $.each(data, function (index, item) {
+                            $('#locationDetail').append('<option value="' + item.id + '">' + item.room + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#locationDetail').empty();
+                $('#locationDetail').append('<option value=""><spring:message code="device.location.detail"/></option>');
+            }
+        });
+    });
+</script>
