@@ -6,21 +6,40 @@ package com.tranlequocthong313.services;
 
 import com.tranlequocthong313.dto.ThreadCategoryDto;
 import com.tranlequocthong313.models.ThreadCategory;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
+import java.util.Map;
 
 /**
- *
  * @author tranlequocthong313
  */
 public interface ThreadCategoryService {
 
-	List<ThreadCategoryDto> findAll();
+	List<ThreadCategoryDto> findAll(Map<String, String> queryParams);
 
 	ThreadCategoryDto findById(Integer id);
 
-	void save(ThreadCategory category);
+	ThreadCategory update(ThreadCategoryDto threadDto);
 
-	void delete(Integer id);
+	void save(ThreadCategory thread);
 
-	public ThreadCategory update(ThreadCategoryDto threadCategoryDto);
+	void delete(int id);
+
+	void update(ThreadCategory threadCategory);
+
+	void save(ThreadCategory threadCategory, MultipartFile image);
+
+	default Long count() {
+		return count(null);
+	}
+
+	Long count(Map<String, String> queryParams);
+
+	void update(ThreadCategoryDto threadCategory, MultipartFile image);
+
+	default List<ThreadCategoryDto> findAll() {
+		return findAll(null);
+	}
+
 }

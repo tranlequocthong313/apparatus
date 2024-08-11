@@ -99,6 +99,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         registry.addFormatter(new DeviceFormatter());
         registry.addFormatter(new DaysOfWeekFormatter());
         registry.addFormatter(new RepairCategoryFormatter());
+		registry.addFormatter(new ForumCategoryFormatter());
     }
 
 }

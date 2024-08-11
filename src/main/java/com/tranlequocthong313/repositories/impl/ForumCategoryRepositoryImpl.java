@@ -5,20 +5,8 @@
 package com.tranlequocthong313.repositories.impl;
 
 import com.tranlequocthong313.exceptions.DuplicateEntryException;
-import com.tranlequocthong313.models.ThreadCategory;
+import com.tranlequocthong313.models.ForumCategory;
 import com.tranlequocthong313.repositories.BaseRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
-
 import com.tranlequocthong313.utils.Utils;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
@@ -26,12 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * @author tranlequocthong313
  */
 @Repository
 @Transactional
-public class ThreadCategoryRepositoryImpl implements BaseRepository<ThreadCategory, Integer> {
+public class ForumCategoryRepositoryImpl implements BaseRepository<ForumCategory, Integer> {
 
 	@Autowired
 	private LocalSessionFactoryBean sessionFactory;
@@ -39,18 +38,18 @@ public class ThreadCategoryRepositoryImpl implements BaseRepository<ThreadCatego
 	private Utils utils;
 
 	@Override
-	public Optional<ThreadCategory> findById(Integer id) {
+	public Optional<ForumCategory> findById(Integer id) {
 		Session session = sessionFactory.getObject().getCurrentSession();
-		return Optional.ofNullable(session.get(ThreadCategory.class, id));
+		return Optional.ofNullable(session.get(ForumCategory.class, id));
 	}
 
 	@Override
-	public ThreadCategory save(ThreadCategory o) {
+	public ForumCategory save(ForumCategory o) {
 		Session session = sessionFactory.getObject().getCurrentSession();
 		try {
 			session.saveOrUpdate(o);
 		} catch (ConstraintViolationException e) {
-			throw new DuplicateEntryException("Duplicate entry for thread category");
+			throw new DuplicateEntryException("Duplicate entry for forum category");
 		}
 		return o;
 	}
@@ -58,7 +57,7 @@ public class ThreadCategoryRepositoryImpl implements BaseRepository<ThreadCatego
 	@Override
 	public void delete(Integer id) {
 		Session session = sessionFactory.getObject().getCurrentSession();
-		ThreadCategory c = getReferenceById(id);
+		ForumCategory c = getReferenceById(id);
 		session.delete(c);
 	}
 
@@ -67,20 +66,20 @@ public class ThreadCategoryRepositoryImpl implements BaseRepository<ThreadCatego
 		Session session = sessionFactory.getObject().getCurrentSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
-		Root<ThreadCategory> root = criteriaQuery.from(ThreadCategory.class);
+		Root<ForumCategory> root = criteriaQuery.from(ForumCategory.class);
 		criteriaQuery
 			.select(builder.count(root));
 		return session.createQuery(criteriaQuery).getSingleResult();
 	}
 
 	@Override
-	public <S extends ThreadCategory> List<S> findAll(Map<String, String> queryParams) {
+	public <S extends ForumCategory> List<S> findAll(Map<String, String> queryParams) {
 		Session session = sessionFactory.getObject().getCurrentSession();
 
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<ThreadCategory> criteriaQuery = builder.createQuery(ThreadCategory.class);
+		CriteriaQuery<ForumCategory> criteriaQuery = builder.createQuery(ForumCategory.class);
 
-		Root<ThreadCategory> root = criteriaQuery.from(ThreadCategory.class);
+		Root<ForumCategory> root = criteriaQuery.from(ForumCategory.class);
 
 		int page = 1;
 		criteriaQuery.where(getPredicates(queryParams, builder, root).toArray(Predicate[]::new));
@@ -94,19 +93,13 @@ public class ThreadCategoryRepositoryImpl implements BaseRepository<ThreadCatego
 		return (List<S>) query.getResultList();
 	}
 
-	private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<ThreadCategory> root) {
+	private static List<Predicate> getPredicates(Map<String, String> queryParams, CriteriaBuilder builder, Root<ForumCategory> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (queryParams != null) {
 			String q = queryParams.get("q");
 			if (q != null && !q.isEmpty()) {
 				predicates.add(
 					builder.like(builder.lower(root.<String>get("name")), "%" + q.toLowerCase() + "%")
-				);
-			}
-			String forum = queryParams.get("forum");
-			if (forum != null && !forum.isEmpty()) {
-				predicates.add(
-					builder.equal(root.get("forumCategory"), Integer.parseInt(forum))
 				);
 			}
 		}

@@ -18,7 +18,7 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 @PropertySource("classpath:env.properties")
-public class ThirdPartyConfig {
+public class CloudinaryConfig {
 	@Autowired
 	private Environment env;
 
