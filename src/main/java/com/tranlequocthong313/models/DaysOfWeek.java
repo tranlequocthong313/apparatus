@@ -4,21 +4,20 @@
  */
 package com.tranlequocthong313.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author tranlequocthong313
  */
 @Entity
@@ -28,30 +27,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 	@NamedQuery(name = "DaysOfWeek.findAll", query = "SELECT d FROM DaysOfWeek d"),
 	@NamedQuery(name = "DaysOfWeek.findById", query = "SELECT d FROM DaysOfWeek d WHERE d.id = :id"),
 	@NamedQuery(name = "DaysOfWeek.findByDay", query = "SELECT d FROM DaysOfWeek d WHERE d.day = :day")})
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DaysOfWeek implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-        @Basic(optional = false)
-        @NotNull
+	@Basic(optional = false)
+	@NotNull
 	private Integer id;
 	@Basic(optional = false)
-        @NotNull
-        @Size(min = 1, max = 9)
+	@NotNull
+	@Size(min = 1, max = 9)
 	private String day;
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "daysOfWeek")
-	private DaysOfWeekMaintenance daysOfWeekMaintenance;
-
-	public DaysOfWeek() {
-	}
+	@Basic(optional = false)
+	@NotNull
+	@Size(min = 1, max = 2)
+	private String key;
+	@JsonIgnore
+	@ManyToMany(mappedBy = "daysOfWeekSet")
+	private Set<Maintenance> maintenanceSet = new HashSet<>();
 
 	public DaysOfWeek(Integer id) {
 		this.id = id;
-	}
-
-	public DaysOfWeek(Integer id, String day) {
-		this.id = id;
-		this.day = day;
 	}
 
 	public Integer getId() {
@@ -70,12 +69,20 @@ public class DaysOfWeek implements Serializable {
 		this.day = day;
 	}
 
-	public DaysOfWeekMaintenance getDaysOfWeekMaintenance() {
-		return daysOfWeekMaintenance;
+	public Set<Maintenance> getMaintenanceSet() {
+		return maintenanceSet;
 	}
 
-	public void setDaysOfWeekMaintenance(DaysOfWeekMaintenance daysOfWeekMaintenance) {
-		this.daysOfWeekMaintenance = daysOfWeekMaintenance;
+	public void setMaintenanceSet(Set<Maintenance> maintenanceSet) {
+		this.maintenanceSet = maintenanceSet;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	@Override
@@ -102,5 +109,5 @@ public class DaysOfWeek implements Serializable {
 	public String toString() {
 		return "com.tranlequocthong313.models.DaysOfWeek[ id=" + id + " ]";
 	}
-	
+
 }

@@ -6,32 +6,21 @@ package com.tranlequocthong313.models;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- *
  * @author tranlequocthong313
  */
 @Entity
@@ -45,8 +34,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 	@NamedQuery(name = "Maintenance.findByImage", query = "SELECT m FROM Maintenance m WHERE m.image = :image"),
 	@NamedQuery(name = "Maintenance.findByLink", query = "SELECT m FROM Maintenance m WHERE m.link = :link"),
 	@NamedQuery(name = "Maintenance.findByRepeatEvery", query = "SELECT m FROM Maintenance m WHERE m.repeatEvery = :repeatEvery"),
-	@NamedQuery(name = "Maintenance.findByStart", query = "SELECT m FROM Maintenance m WHERE m.start = :start"),
-	@NamedQuery(name = "Maintenance.findByEnd", query = "SELECT m FROM Maintenance m WHERE m.end = :end"),
 	@NamedQuery(name = "Maintenance.findByAllDay", query = "SELECT m FROM Maintenance m WHERE m.allDay = :allDay"),
 	@NamedQuery(name = "Maintenance.findByEndDateRecurrence", query = "SELECT m FROM Maintenance m WHERE m.endDateRecurrence = :endDateRecurrence"),
 	@NamedQuery(name = "Maintenance.findByOccurrenceCount", query = "SELECT m FROM Maintenance m WHERE m.occurrenceCount = :occurrenceCount"),
@@ -55,14 +42,39 @@ import org.hibernate.annotations.UpdateTimestamp;
 	@NamedQuery(name = "Maintenance.findByType", query = "SELECT m FROM Maintenance m WHERE m.type = :type"),
 	@NamedQuery(name = "Maintenance.findByRecurrenceType", query = "SELECT m FROM Maintenance m WHERE m.recurrenceType = :recurrenceType"),
 	@NamedQuery(name = "Maintenance.findByEndRecurrenceType", query = "SELECT m FROM Maintenance m WHERE m.endRecurrenceType = :endRecurrenceType")})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Maintenance implements Serializable {
+
+	public enum Type {
+		PREVENTIVE,
+		CORRECTIVE,
+		PREDICTIVE,
+		CONDITION_BASED,
+		EMERGENCY;
+	}
+
+	public enum RecurrenceType {
+		NONE,
+		DAILY,
+		WEEKLY,
+		MONTHLY,
+		YEARLY
+	}
+
+	public enum EndRecurrenceType {
+		NEVER,
+		ON_DATE,
+		AFTER_OCCURRENCES;
+	}
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Basic(optional = false)
 	private Integer id;
-	@Size(max = 50)
+	@Size(max = 255)
 	private String summary;
 	@Size(max = 255)
 	private String description;
@@ -72,18 +84,29 @@ public class Maintenance implements Serializable {
 	private String link;
 	@Column(name = "repeat_every")
 	private Integer repeatEvery;
-	@Basic(optional = false)
-	@NotNull
+	@Column(name = "start_date_time")
+	@Basic
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date start;
-	@Basic(optional = false)
-	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+	private Date startDateTime;
+	@Column(name = "end_date_time")
+	@Basic
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date end;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+	private Date endDateTime;
 	@Column(name = "all_day")
 	private Boolean allDay;
+	@Column(name = "start_date")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date startDate;
+	@Column(name = "end_date")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDate;
 	@Column(name = "end_date_recurrence")
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDateRecurrence;
 	@Column(name = "occurrence_count")
 	private Integer occurrenceCount;
@@ -97,35 +120,37 @@ public class Maintenance implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@UpdateTimestamp
 	private Date updatedAt;
-	@Size(max = 15)
-	private String type;
-	@Size(max = 7)
+	@Enumerated(EnumType.STRING)
+	private Type type;
 	@Column(name = "recurrence_type")
-	private String recurrenceType;
-	@Size(max = 17)
+	@Enumerated(EnumType.STRING)
+	private RecurrenceType recurrenceType;
 	@Column(name = "end_recurrence_type")
-	private String endRecurrenceType;
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenance")
-	private DaysOfWeekMaintenance daysOfWeekMaintenance;
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "maintenance")
-	private UserMaintenance userMaintenance;
+	@Enumerated(EnumType.STRING)
+	private EndRecurrenceType endRecurrenceType;
 	@JoinColumn(name = "device_id", referencedColumnName = "id")
 	@ManyToOne
 	private Device device;
-
-	public Maintenance() {
-	}
+	@JoinColumn(name = "device_type_id", referencedColumnName = "id")
+	@ManyToOne
+	private DeviceType deviceType;
+	@ManyToMany
+	@JoinTable(
+		name = "days_of_week_maintenance",
+		joinColumns = @JoinColumn(name = "maintenance_id"),
+		inverseJoinColumns = @JoinColumn(name = "days_of_week_id")
+	)
+	private Set<DaysOfWeek> daysOfWeekSet = new HashSet<>();
+	@ManyToMany
+	@JoinTable(
+		name = "user_maintenance",
+		joinColumns = @JoinColumn(name = "maintenance_id"),
+		inverseJoinColumns = @JoinColumn(name = "user_id")
+	)
+	private Set<User> userSet = new HashSet<>();
 
 	public Maintenance(Integer id) {
 		this.id = id;
-	}
-
-	public Maintenance(Integer id, Date start, Date end, Date createdAt, Date updatedAt) {
-		this.id = id;
-		this.start = start;
-		this.end = end;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
@@ -176,20 +201,36 @@ public class Maintenance implements Serializable {
 		this.repeatEvery = repeatEvery;
 	}
 
-	public Date getStart() {
-		return start;
+	public Date getStartDateTime() {
+		return startDateTime;
 	}
 
-	public void setStart(Date start) {
-		this.start = start;
+	public void setStartDateTime(Date startDateTime) {
+		this.startDateTime = startDateTime;
 	}
 
-	public Date getEnd() {
-		return end;
+	public Date getEndDateTime() {
+		return endDateTime;
 	}
 
-	public void setEnd(Date end) {
-		this.end = end;
+	public void setEndDateTime(Date endDateTime) {
+		this.endDateTime = endDateTime;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public Boolean getAllDay() {
@@ -232,44 +273,52 @@ public class Maintenance implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public String getType() {
+	public DeviceType getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(DeviceType deviceType) {
+		this.deviceType = deviceType;
+	}
+
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
-	public String getRecurrenceType() {
+	public RecurrenceType getRecurrenceType() {
 		return recurrenceType;
 	}
 
-	public void setRecurrenceType(String recurrenceType) {
+	public void setRecurrenceType(RecurrenceType recurrenceType) {
 		this.recurrenceType = recurrenceType;
 	}
 
-	public String getEndRecurrenceType() {
+	public EndRecurrenceType getEndRecurrenceType() {
 		return endRecurrenceType;
 	}
 
-	public void setEndRecurrenceType(String endRecurrenceType) {
+	public void setEndRecurrenceType(EndRecurrenceType endRecurrenceType) {
 		this.endRecurrenceType = endRecurrenceType;
 	}
 
-	public DaysOfWeekMaintenance getDaysOfWeekMaintenance() {
-		return daysOfWeekMaintenance;
+	public Set<DaysOfWeek> getDaysOfWeekSet() {
+		return daysOfWeekSet;
 	}
 
-	public void setDaysOfWeekMaintenance(DaysOfWeekMaintenance daysOfWeekMaintenance) {
-		this.daysOfWeekMaintenance = daysOfWeekMaintenance;
+	public void setDaysOfWeekSet(Set<DaysOfWeek> daysOfWeekSet) {
+		this.daysOfWeekSet = daysOfWeekSet;
 	}
 
-	public UserMaintenance getUserMaintenance() {
-		return userMaintenance;
+	public Set<User> getUserSet() {
+		return userSet;
 	}
 
-	public void setUserMaintenance(UserMaintenance userMaintenance) {
-		this.userMaintenance = userMaintenance;
+	public void setUserSet(Set<User> userSet) {
+		this.userSet = userSet;
 	}
 
 	public Device getDevice() {
