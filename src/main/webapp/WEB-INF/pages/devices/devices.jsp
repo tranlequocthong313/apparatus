@@ -201,6 +201,14 @@
                                         <p class="text-xs font-weight-bold mb-0">${device.status}</p>
                                     </td>
                                     <td class="align-middle">
+										<a class="text-dark font-weight-bold text-xs"
+										   href="<c:url value='/maintenances/device/${device.id}/create' />"
+										   data-toggle="tooltip"
+										   data-original-title="<spring:message code="add.new.maintenance"/>"
+										>
+											<spring:message code="add.new.maintenance"/>
+										</a>
+										|
                                         <a class="text-dark font-weight-bold text-xs"
                                            href="<c:url value='/repairs/device/${device.id}/create' />"
                                            data-toggle="tooltip"
