@@ -4,11 +4,10 @@
  */
 package com.tranlequocthong313.dto;
 
-import java.util.Date;
-
-import com.tranlequocthong313.models.ForumCategory;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  *
@@ -16,11 +15,8 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class ThreadCategoryDto {
+public class ForumCategoryDto {
 
 	private Integer id;
 	private String name;
-	private ForumCategory forumCategory;
-	private Date createdAt;
-	private Date updatedAt;
 }
