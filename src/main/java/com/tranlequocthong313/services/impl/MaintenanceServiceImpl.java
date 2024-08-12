@@ -51,6 +51,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 			.endRecurrenceType(maintenance.getEndRecurrenceType())
 			.device(maintenance.getDevice())
 			.deviceType(maintenance.getDeviceType())
+			.userSet(maintenance.getUserSet())
 			.createdAt(maintenance.getCreatedAt())
 			.updatedAt(maintenance.getUpdatedAt())
 			.build();
@@ -118,6 +119,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 			.endRecurrenceType(maintenanceDto.getEndRecurrenceType())
 			.device(maintenanceDto.getDevice())
 			.deviceType(maintenanceDto.getDeviceType())
+			.userSet(maintenanceDto.getUserSet())
 			.createdAt(maintenanceDto.getCreatedAt())
 			.updatedAt(maintenanceDto.getUpdatedAt())
 			.build();

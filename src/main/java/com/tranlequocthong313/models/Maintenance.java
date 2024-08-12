@@ -141,7 +141,7 @@ public class Maintenance implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "days_of_week_id")
 	)
 	private Set<DaysOfWeek> daysOfWeekSet = new HashSet<>();
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "user_maintenance",
 		joinColumns = @JoinColumn(name = "maintenance_id"),

@@ -48,7 +48,7 @@ public class IndexController {
 	@Autowired
 	private ActivityLogService activityLogService;
 	@Autowired
-	private GoogleCalendarService googleCalendarService;
+	private MaintenanceService maintenanceService;
 
 	@ModelAttribute
 	public void commAttrs(Model model, HttpServletRequest request, Principal principal) {
@@ -84,6 +84,7 @@ public class IndexController {
 		model.addAttribute("deviceStatuses", statsService.deviceStatuses());
 
 		model.addAttribute("activityLogs", activityLogService.findAll());
+		model.addAttribute("recentMaintenances", maintenanceService.findAll());
 
 		return "index";
 	}
