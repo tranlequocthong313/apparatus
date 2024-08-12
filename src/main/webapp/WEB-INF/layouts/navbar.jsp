@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : header
     Created on : Jul 31, 2024, 9:18:44 PM
     Author     : tranlequocthong313
@@ -34,7 +34,7 @@
             <ul class="navbar-nav  justify-content-end">
                 <li class="nav-item d-flex align-items-center">
                     <a class="btn btn-outline-primary btn-sm mb-0" target="_blank"
-                       href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">
+                       href="http://localhost:3000">
                         <spring:message code="online.threads" />
                     </a>
                 </li>

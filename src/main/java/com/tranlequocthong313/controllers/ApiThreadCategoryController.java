@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/thread-categories")
+@CrossOrigin
 public class ApiThreadCategoryController {
 
     @Autowired

@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : login
     Created on : Aug 5, 2024, 11:50:02 PM
     Author     : tranlequocthong313
@@ -46,7 +46,7 @@
                         <ul class="navbar-nav d-lg-flex d-none">
                             <li class="nav-item d-flex align-items-center">
                                 <a class="btn btn-outline-primary btn-sm mb-0 me-2" target="_blank"
-                                   href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard"><spring:message code="navbar.onlineThreads" /></a>
+                                   href="http://localhost:3000"><spring:message code="navbar.onlineThreads" /></a>
                             </li>
                         </ul>
                     </div>

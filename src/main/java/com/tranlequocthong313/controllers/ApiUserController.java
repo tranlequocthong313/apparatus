@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin
 public class ApiUserController {
 
 	@Autowired
