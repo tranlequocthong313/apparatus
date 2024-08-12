@@ -164,7 +164,7 @@
                             </thead>
                             <tbody>
                             <c:forEach items="${devices}" var="device">
-                                <tr>
+                               <tr>
                                     <td class="ps-3">
                                         <input type="checkbox" name="selectedIds" value="${device.id}"
                                                class="selectItem">

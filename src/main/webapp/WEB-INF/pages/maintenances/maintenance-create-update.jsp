@@ -60,7 +60,7 @@
 				</form:select>
 				<form:errors path="type" cssClass="text-danger"/>
 			</div>
-			<label class="form-label"><spring:message code="user.select"/></label>
+			<label class="form-label"><spring:message code="maintenance.participant"/></label>
 			<div class="form-group col-md-12">
 				<div class="col-md-7">
 					<form:select path="userSet" items="${users}" multiple="true" itemValue="id"

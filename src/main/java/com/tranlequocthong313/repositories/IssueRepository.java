@@ -22,4 +22,6 @@ public interface IssueRepository extends BaseRepository<Issue, Integer> {
     Long totalCost(Map<String, String> queryParams);
 
     Long unresolvedDays(Map<String, String> queryParams);
+
+	boolean exist(Map<String, String> queryParams);
 }

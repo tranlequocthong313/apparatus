@@ -78,7 +78,7 @@ public class DeviceController {
     @GetMapping("/{id}")
     public String getDevice(@PathVariable(value = "id") String id, Model model) {
         DeviceDto deviceDto = deviceService.findById(id);
-        model.addAttribute("totalCost", repairService.totalCost(deviceDto));
+        model.addAttribute("totalCost", repairService.totalCost(Map.of("device", id)));
         model.addAttribute("unresolvedDays", issueService.unresolvedDays(Map.of("device", id)));
         model.addAttribute("totalIssue", issueService.count(Map.of("device", id)));
         model.addAttribute("device", deviceDto);
@@ -164,18 +164,20 @@ public class DeviceController {
         deviceDto.setStatus(device.getStatus());
         deviceDto.setNote(device.getNote());
         deviceDto.setDeviceCategory(device.getDeviceCategory());
-        deviceDto.setLocation(device.getLocation());
-        deviceDto.setLocationDetail(device.getLocationDetail());
         deviceDto.setProvider(device.getProvider());
         deviceDto.setUser(device.getUser());
         deviceService.update(deviceDto, image);
-        locationHistoryService.save(LocationHistory.builder()
-                .dateOfMoving(new Date())
-                .location(device.getLocation())
-                .locationDetail(device.getLocationDetail())
-                .device(device)
-                .build()
-        );
+		if (!deviceDto.getLocation().equals(device.getLocation()) && !deviceDto.getLocationDetail().equals(device.getLocationDetail())) {
+			locationHistoryService.save(LocationHistory.builder()
+				.dateOfMoving(new Date())
+				.location(device.getLocation())
+				.locationDetail(device.getLocationDetail())
+				.device(device)
+				.build()
+			);
+		}
+		deviceDto.setLocation(device.getLocation());
+		deviceDto.setLocationDetail(device.getLocationDetail());
         activityLogService.save(
                 ActivityLog.builder()
                         .user(userService.getCurrentUser())

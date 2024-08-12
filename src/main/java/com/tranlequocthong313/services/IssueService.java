@@ -2,6 +2,7 @@ package com.tranlequocthong313.services;
 
 import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.IssueDto;
+import com.tranlequocthong313.models.Device;
 import com.tranlequocthong313.models.Issue;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,4 +46,6 @@ public interface IssueService {
     Long unresolvedDays(Map<String, String> queryParams);
 
     Issue mapToIssue(IssueDto issue);
+
+	boolean isError(Device device);
 }

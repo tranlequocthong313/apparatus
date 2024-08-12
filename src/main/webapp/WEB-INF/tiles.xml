@@ -261,6 +261,11 @@
 		<put-attribute name="main"
 					   value="/WEB-INF/pages/repairs/repair-create-update.jsp"/>
 	</definition>
+	<definition name="repair-stats" extends="baseLayout">
+		<put-attribute name="title" value="Repair Stats"/>
+		<put-attribute name="main"
+					   value="/WEB-INF/pages/repairs/repair-stats.jsp"/>
+	</definition>
 	<!--    END REPAIRS   -->
 
 	<!--    USERS    -->

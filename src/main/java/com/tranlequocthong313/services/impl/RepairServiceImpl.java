@@ -4,17 +4,14 @@
  */
 package com.tranlequocthong313.services.impl;
 
-import com.tranlequocthong313.dto.DeviceDto;
 import com.tranlequocthong313.dto.RepairDto;
 import com.tranlequocthong313.models.Repair;
-import com.tranlequocthong313.repositories.BaseRepository;
 import com.tranlequocthong313.repositories.RepairRepository;
 import com.tranlequocthong313.services.RepairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -111,11 +108,7 @@ public class RepairServiceImpl implements RepairService {
     }
 
     @Override
-    public Long totalCost(DeviceDto device) {
-        Map<String, String> queryParams = new HashMap<>();
-        if (device != null) {
-            queryParams.put("device", device.getId());
-        }
+    public Long totalCost(Map<String, String> queryParams) {
         return repairRepository.totalCost(queryParams);
     }
 }

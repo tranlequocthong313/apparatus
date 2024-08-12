@@ -9,35 +9,35 @@ import java.util.List;
 import java.util.Map;
 
 public interface RepairService {
-    List<RepairDto> findAll(Map<String, String> queryParams);
+	List<RepairDto> findAll(Map<String, String> queryParams);
 
-    RepairDto findById(Integer id);
+	RepairDto findById(Integer id);
 
-    Repair update(RepairDto threadDto);
+	Repair update(RepairDto threadDto);
 
-    void save(Repair thread);
+	void save(Repair thread);
 
-    void delete(int id);
+	void delete(int id);
 
-    void update(Repair repair);
+	void update(Repair repair);
 
-    void save(Repair repair, MultipartFile image);
+	void save(Repair repair, MultipartFile image);
 
-    default Long count() {
-        return count(null);
-    }
+	default Long count() {
+		return count(null);
+	}
 
-    Long count(Map<String, String> queryParams);
+	Long count(Map<String, String> queryParams);
 
-    void update(RepairDto repair, MultipartFile image);
+	void update(RepairDto repair, MultipartFile image);
 
-    default List<RepairDto> findAll() {
-        return findAll(null);
-    }
+	default List<RepairDto> findAll() {
+		return findAll(null);
+	}
 
-    default Long totalCost() {
-        return totalCost(null);
-    }
+	default Long totalCost() {
+		return totalCost(null);
+	}
 
-    Long totalCost(DeviceDto device);
+	Long totalCost(Map<String, String> queryParams);
 }

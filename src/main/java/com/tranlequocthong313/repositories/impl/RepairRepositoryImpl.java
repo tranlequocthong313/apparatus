@@ -50,6 +50,7 @@ public class RepairRepositoryImpl implements RepairRepository {
             page = Integer.parseInt(queryParams.getOrDefault("page", "1"));
         }
 
+		criteria.orderBy(builder.desc(root.get("id")));
         Query<Repair> query = session.createQuery(criteria);
         utils.pagniate(query, page);
         return (List<S>) query.getResultList();

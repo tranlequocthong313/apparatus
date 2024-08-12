@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @author tranlequocthong313
@@ -36,4 +37,5 @@ public class MaintenanceDto {
 	private Maintenance.EndRecurrenceType endRecurrenceType;
 	private Device device;
 	private DeviceType deviceType;
+	private Set<User> userSet;
 }
