@@ -43,7 +43,6 @@ public class ApiUserController {
 	@PostMapping(path = "/register",
 		consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
 		produces = {MediaType.APPLICATION_JSON_VALUE})
-	@CrossOrigin
 	public User register(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
 		User u = new User();
 		u.setFullName(params.get("fullName"));
@@ -70,7 +69,6 @@ public class ApiUserController {
 	}
 
 	@GetMapping(path = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
-	@CrossOrigin
 	public User currentUser(Principal user) {
 		return userService.getCurrentUser();
 	}
