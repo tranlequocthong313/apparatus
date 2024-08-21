@@ -46,7 +46,7 @@ public class Thread implements Serializable {
 	@Basic(optional = false)
 	private Integer id;
 	@NotNull
-	@Size(max = 50)
+	@Size(max = 255)
 	private String title;
 	@NotNull
 	@Lob

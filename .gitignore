@@ -35,3 +35,5 @@ src/main/webapp/META-INF
 
 /src/main/resources/env.properties
 /src/main/resources/credentials.json
+
+db.sql

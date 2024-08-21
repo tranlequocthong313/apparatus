@@ -35,7 +35,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Entity
 @Table(name = "forum_category")
-@JsonIgnoreProperties(value = {"forumSet"})
+@JsonIgnoreProperties(value = {"threadCategorySet"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -72,13 +72,12 @@ public class ForumCategory implements Serializable {
 		this.name = name;
 	}
 
-	@XmlTransient
-	public Set<ThreadCategory> getThreadSet() {
+	public Set<ThreadCategory> getThreadCategorySet() {
 		return threadCategorySet;
 	}
 
-	public void setThreadSet(Set<ThreadCategory> forumSet) {
-		this.threadCategorySet = forumSet;
+	public void setThreadCategorySet(Set<ThreadCategory> threadCategorySet) {
+		this.threadCategorySet = threadCategorySet;
 	}
 
 	@Override

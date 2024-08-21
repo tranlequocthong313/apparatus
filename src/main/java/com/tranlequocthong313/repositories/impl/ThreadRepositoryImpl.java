@@ -56,7 +56,7 @@ public class ThreadRepositoryImpl implements BaseRepository<Thread, Integer> {
         if (queryParams != null) {
             String q = queryParams.get("q");
             if (q != null && !q.isEmpty()) {
-                predicates.add(builder.like(builder.lower(root.<String>get("title")), "%" + q.toLowerCase() + "%"));
+                predicates.add(builder.like(builder	.lower(root.<String>get("title")), "%" + q.toLowerCase() + "%"));
             }
 
             String categoryId = queryParams.get("category");
