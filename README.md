@@ -1,127 +1,141 @@
-# ⚙️ Apparatus - Device Maintenance Management System 🛠️
+# Dashboard Quản lý Thiết bị (Spring MVC)
 
-The **Apparatus** system is designed to help track and manage maintenance schedules, record incidents, and maintain repair histories for devices within an organization. Below is an overview of the features and functionalities of the project:
+**Dashboard Quản lý Thiết bị** là một ứng dụng web được phát triển bằng Spring MVC, giúp quản lý thông tin các thiết bị trong một hệ thống. Ứng dụng này cung cấp các tính năng như thêm, sửa, xóa, và xem thông tin chi tiết của các thiết bị, đồng thời hỗ trợ phân quyền người dùng và quản lý lịch sử hoạt động.
 
-## 🧰 Device Management
+## Tính năng chính
 
-- **➕ Add, Edit, or Delete Devices:** Administrators can manage devices within the system by adding, editing, or deleting them.
-- **📝 Detailed Device Information Management:** Store and manage detailed information about devices, such as name, device code, device type, manufacturer, purchase date, and current status.
-- **📍 Device Location Management:** Track the current location of devices within the facility or organization, including relocating devices when necessary.
+- **Quản lý thiết bị**: Thêm, sửa, xóa, và xem thông tin chi tiết của các thiết bị.
+- **Quản lý người dùng**: Phân quyền người dùng (admin, user) và quản lý thông tin người dùng.
+- **Tìm kiếm và phân trang**: Hỗ trợ tìm kiếm thiết bị và phân trang dữ liệu.
+- **Lịch sử hoạt động**: Theo dõi lịch sử thao tác của người dùng trên hệ thống.
+- **Báo cáo và thống kê**: Xem báo cáo thống kê về trạng thái và hoạt động của thiết bị.
 
-## 📅 Maintenance Schedule Management
+## Công nghệ sử dụng
 
-- **📆 Create and Manage Maintenance Schedules:** Set up and manage regular maintenance schedules for devices, including the frequency and type of maintenance to be performed.
-- **⏰ Maintenance Reminders and Tracking:** Provide notifications and reminders for upcoming or overdue maintenance tasks.
+- **Backend**: Spring MVC, Spring Boot, Spring Data JPA, Spring Security
+- **Frontend**: Thymeleaf, HTML, CSS, JavaScript, Bootstrap
+- **Database**: MySQL (hoặc H2 cho môi trường phát triển)
+- **Authentication**: Spring Security (JWT hoặc Session-based)
+- **Build Tool**: Maven
 
-## 🚨 Incident Reporting and Management
+## Cài đặt và chạy dự án
 
-- **🛑 Incident Reporting:** Allow users to report incidents or issues with devices, including a description of the issue, severity level, and occurrence time.
-- **🔄 Incident Status Management:** Track the status and progress of reported incidents.
+### Yêu cầu hệ thống
 
-## 🛠️ Repair History Management
+- Java 11 trở lên
+- Maven 3.x
+- MySQL (hoặc H2 cho môi trường phát triển)
 
-- **📋 Record Repair History:** Store information about past repairs, including repair date, type of repair, and costs.
-- **💰 Repair Cost Tracking:** Track costs related to repairs and maintenance to analyze expenses and maintenance efficiency.
-- **📊 Generate Repair History Reports:** Provide reports on the repair history for individual devices or groups of devices.
+### Các bước cài đặt
 
-## 💬 Social and Support Features
-
-- **🗣️ Forum and Discussion:** Provide a forum or discussion tool where maintenance staff can share experiences and discuss technical issues. This feature integrates Firebase for real-time chat functionality.
-- **🎧 Customer Support:** Offer a customer support channel to resolve issues related to devices and maintenance.
-
----
-
-## 🛠️ Installation and Setup Guide
-
-### 1. 🖥️ System Requirements
-
-- **☕ Java (version 14 or later)**
-- **🍃 Spring MVC and Hibernate**
-- **🐬 MySQL**
-- **🔑 Google Calendar API**
-- **🔗 Firebase (for real-time chat integration)**
-
-### 2. 🚀 Project Installation
-
-1. **Clone the project from the repository:**
-
+1. **Clone dự án**:
    ```bash
-   git clone https://github.com/your-username/Apparatus.git
+   git clone https://github.com/tranlequocthong313/apparatus.git
+   cd apparatus
    ```
 
-2. **Navigate to the project directory:**
+2. **Cấu hình cơ sở dữ liệu**:
+   - Tạo một cơ sở dữ liệu MySQL (hoặc sử dụng H2 cho môi trường phát triển).
+   - Cập nhật file `application.properties` hoặc `application.yml` với thông tin kết nối cơ sở dữ liệu:
+     ```properties
+     spring.datasource.url=jdbc:mysql://localhost:3306/your_db_name
+     spring.datasource.username=your_db_user
+     spring.datasource.password=your_db_password
+     spring.jpa.hibernate.ddl-auto=update
+     ```
 
+3. **Build và chạy dự án**:
    ```bash
-   cd Apparatus
-   ```
-
-3. **Configure Maven dependencies:**
-
-   Ensure all necessary dependencies are listed in your `pom.xml` file, including Spring, Hibernate, MySQL, Google Calendar API, and Firebase libraries.
-
-### 3. 🔧 Environment Configuration
-
-1. **MySQL Database Setup:**
-   - Create a MySQL database with the information configured in the `application.properties` file.
-
-2. **Google Calendar API:**
-   - Set up Google Calendar API and add the necessary credentials to your environment.
-
-3. **Firebase Setup:**
-   - Configure Firebase for real-time chat by adding the `credentials.json` file to your project and updating the `application.properties` accordingly.
-
-### 4. 📂 Database Initialization
-
-1. **Run database migrations to create tables:**
-
-   ```bash
+   mvn clean install
    mvn spring-boot:run
    ```
 
-2. **Initialize the database with sample data (optional):**
+4. **Truy cập ứng dụng**:
+   - Mở trình duyệt và truy cập vào địa chỉ: `http://localhost:8080`
 
-   You can populate the database with initial data for testing purposes.
+### Cấu hình môi trường
 
-### 5. 🎉 Running the Project
+Tạo file `application.properties` hoặc `application.yml` trong thư mục `src/main/resources` và thêm các cấu hình cần thiết:
 
-Start the project using Maven:
+```properties
+# Cấu hình cơ sở dữ liệu
+spring.datasource.url=jdbc:mysql://localhost:3306/your_db_name
+spring.datasource.username=your_db_user
+spring.datasource.password=your_db_password
 
-```bash
-mvn spring-boot:run
+# Cấu hình Spring Security
+spring.security.user.name=admin
+spring.security.user.password=admin123
+
+# Cấu hình JWT (nếu sử dụng)
+jwt.secret=your-secret-key
+jwt.expiration=86400000
 ```
 
-Open your browser and go to `http://localhost:8080/` to access the Apparatus system. 🌐
+## Cấu trúc thư mục
 
----
+```
+apparatus/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── com/
+│   │   │   │   ├── example/
+│   │   │   │   │   ├── apparatus/
+│   │   │   │   │   │   ├── config/          # Cấu hình Spring (Security, Web, v.v.)
+│   │   │   │   │   │   ├── controller/      # Các controller xử lý request
+│   │   │   │   │   │   ├── model/          # Các entity (JPA)
+│   │   │   │   │   │   ├── repository/     # Các repository (Spring Data JPA)
+│   │   │   │   │   │   ├── service/        # Các service xử lý logic nghiệp vụ
+│   │   │   │   │   │   ├── util/           # Các tiện ích (JWT, v.v.)
+│   │   │   │   │   │   └── ApparatusApplication.java # Main class
+│   │   ├── resources/
+│   │   │   ├── static/      # CSS, JS, hình ảnh
+│   │   │   ├── templates/   # Các file Thymeleaf (HTML)
+│   │   │   └── application.properties # Cấu hình ứng dụng
+│   └── test/                # Các bài test
+├── pom.xml                  # File cấu hình Maven
+└── README.md                # Tài liệu hướng dẫn
+```
 
-## 🎨 Design and Use Cases
+## Các API Endpoints
 
-### 📸 Screenshots
+Dưới đây là một số API endpoints chính:
 
-Here are some screenshots of the Apparatus interface:
+- **Authentication**:
+  - `POST /api/auth/login` - Đăng nhập và nhận JWT token (nếu sử dụng JWT).
+  - `POST /api/auth/logout` - Đăng xuất.
 
-1. **🖥️ Dashboard Overview**:
-   ![Dashboard Overview](path_to_image/dashboard.png)
+- **Quản lý thiết bị**:
+  - `GET /api/devices` - Lấy danh sách thiết bị (có phân trang).
+  - `GET /api/devices/{id}` - Lấy thông tin chi tiết của một thiết bị.
+  - `POST /api/devices` - Thêm thiết bị mới.
+  - `PUT /api/devices/{id}` - Cập nhật thông tin thiết bị.
+  - `DELETE /api/devices/{id}` - Xóa thiết bị.
 
-2. **🧰 Device Management**:
-   ![Device Management](path_to_image/device_management.png)
+- **Quản lý người dùng**:
+  - `GET /api/users` - Lấy danh sách người dùng.
+  - `POST /api/users` - Thêm người dùng mới.
+  - `PUT /api/users/{id}` - Cập nhật thông tin người dùng.
+  - `DELETE /api/users/{id}` - Xóa người dùng.
 
-3. **📅 Maintenance Scheduling**:
-   ![Maintenance Scheduling](path_to_image/maintenance_scheduling.png)
+- **Lịch sử hoạt động**:
+  - `GET /api/activities` - Lấy danh sách lịch sử hoạt động.
 
-4. **🚨 Incident Reporting**:
-   ![Incident Reporting](path_to_image/incident_reporting.png)
+## Đóng góp
 
-5. **🛠️ Repair History**:
-   ![Repair History](path_to_image/repair_history.png)
+Nếu bạn muốn đóng góp vào dự án, vui lòng làm theo các bước sau:
 
-6. **💬 Forum and Real-Time Chat**:
-   ![Forum and Real-Time Chat](path_to_image/forum_chat.png)
+1. Fork dự án
+2. Tạo branch mới (`git checkout -b feature/YourFeatureName`)
+3. Commit các thay đổi (`git commit -m 'Add some feature'`)
+4. Push lên branch (`git push origin feature/YourFeatureName`)
+5. Mở một Pull Request
 
----
+## Liên hệ
 
-## 📈 Results and Future Enhancements
+Nếu bạn có bất kỳ câu hỏi hoặc góp ý nào, vui lòng liên hệ:
 
-This section can be expanded with more details as the project progresses, including performance metrics, user feedback, and planned enhancements.
-
----
+- **Tên**: Trần Lê Quốc Thông
+- **Email**: tranlequocthong313@gmail.com
+- **GitHub**: [tranlequocthong313](https://github.com/tranlequocthong313)
